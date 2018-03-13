@@ -16,31 +16,23 @@ or in the "license" file accompanying this file. This file is distributed on an 
 
 var curr_choice = -1;
 
-$(document).ready(populateButtons({}));
+$(document).ready(function() {
+    $.ajax(
+        {
+            url: "http://127.0.0.1:5000/streamer/123456/texts",
+            type: "GET",
+            success: function(data) {
+             populateButtons(data);   
+            },
+        }
+    )
+});
 
 function populateButtons(data) {
-    // Assume that data comes from the server   
-    data = {
-        buttons: [
-            {
-                id: 0,
-                text: 'Text example #1',
-            },
-            {
-                id: 1,
-                text: 'Text example #2',
-            },
-            {
-                id: 2,
-                text: 'Text example #3',
-            }
-        ]
-    };
-    
     for (var i = 0; i < data.buttons.length; i++) {
         var $btn = $("<button class='button'></button>");
-        $btn.attr("id", String(data.buttons[i].id));
-        $btn.attr("onclick", "choice(" + data.buttons[i].id + ")");
+        $btn.attr("id", String(data.buttons[i].text_id));
+        $btn.attr("onclick", "choice(" + data.buttons[i].text_id + ")");
         $btn.text(data.buttons[i].text);
         $("#buttons").append($btn);
     }

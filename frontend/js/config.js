@@ -13,3 +13,20 @@ or in the "license" file accompanying this file. This file is distributed on an 
   Set Javascript specific to the extension configuration view in this file.
 
 */
+
+function addChoice() {
+    var text = $("#text").val();
+    if (text) {
+        $.ajax(
+        {
+            url: "http://127.0.0.1:5000/streamer/123456/add",
+            type: "POST",
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify({"text": text}),
+            success: function(data) {
+             $("#log").append("Added " + text + " with success " + data.success + "<br>");
+            },
+        }
+    )
+    }
+}

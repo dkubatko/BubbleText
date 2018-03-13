@@ -53,7 +53,7 @@ class Streamer:
     # Adds one text choice for the streamer
     def add_text_choice(self, text):
         choice = {
-            "text_id": len(text_choices),
+            "text_id": len(self.text_choices),
             "text": text
         }
         self.text_choices.append(choice)
@@ -64,3 +64,12 @@ class Streamer:
                   if choice["text_id"] == text_id).next()
         self.curr_text_id = choice["text_id"]
         self.curr_text = choice["text"]
+
+    def to_json(self):
+        return {
+            "streamer_id": self.streamer_id,
+            "display_name": self.display_name,
+            "curr_text": self.curr_text,
+            "curr_text_id": self.curr_text_id,
+            "text_choices": self.text_choices
+        }

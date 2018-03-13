@@ -9,11 +9,13 @@ import logging
 class Bubble():
     streamers = None
     logger = None
+    dbworker = None
 
     def __init__(self, read_data=False):
         self._log_setup()
         self.streamers = []
         if (read_data):
+            self.dbworker = MongoWorker()
             self.load_from_db()
 
     def _log_setup(self):
@@ -36,8 +38,7 @@ class Bubble():
         self.logger.addHandler(log_s)
 
     def load_from_db(self):
-        worker = MongoWorker()
-        coll = worker.get_streamers_collection()
+        coll = self.dbworker.get_streamers_collection()
         count = 0
         for streamer in coll.find():
             curr = Streamer(
@@ -51,3 +52,48 @@ class Bubble():
             count += 1
 
         self.logger.info(local_settings.LOG_DB_LOAD_SUCCESS.format(count))
+
+    # Update existing streamer object in db
+    def db_update_streamer(self, streamer_obj):
+        coll = self.dbworker.get_streamers_collection()
+        for streamer in coll:
+            if streamer["streamer_id"] == streamer_obj.streamer_id:
+                coll.update_one(
+                    {"id": streamer["_id"]},
+                    {
+                        "$set": {
+                            streamer_obj.to_json()
+                        }
+                    }
+                )
+                # TODO self.logger()
+
+    # Inserts new streamer object
+    def db_insert_new_streamer(self, streamer):
+        # TODO
+        s = streamer.to_json()
+
+    # Returns list of streamer's preset texts
+    def get_streamer_texts(self, streamer_id):
+        for streamer in self.streamers:
+            if streamer.streamer_id == streamer_id:
+                return streamer.text_choices
+        return []
+
+    # Find streamer object by id
+    def find_streamer_by_id(self, streamer_id):
+        for streamer in self.streamers:
+            if streamer.streamer_id == streamer_id:
+                return streamer
+        return None
+
+    # Adds text choice to specific streamer
+    def add_text_choice(self, streamer_id, text):
+        streamer = self.find_streamer_by_id(streamer_id)
+
+        if (streamer is None):
+            # TODO self.logger()
+            return
+
+        streamer.add_text_choice(text)
+        # self.db_update_streamer(streamer)

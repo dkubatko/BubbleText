@@ -1,4 +1,5 @@
-from flask import Flask
+from flask import Flask, jsonify, request
+from flask.ext.cors import CORS, cross_origin
 from flask_socketio import SocketIO, join_room, leave_room, send, emit
 from bubble import Bubble
 import settings.flask_settings as local_settings
@@ -9,6 +10,7 @@ app = Flask(__name__)
 # app.config['SECRET_KEY']
 socketio = SocketIO(app)
 logger = logging.getLogger('flask_app')
+bubble = Bubble(True)
 
 
 def log_setup(app, logger):
@@ -45,26 +47,38 @@ def log_setup(app, logger):
 
     logger.info("Successfully set up logging")
 
-# Set up main bubble object
-
-
-def bubble_setup():
-    return Bubble(True)
-
 
 @app.route("/")
 def hello():
     return "Hello world"
 
 
-@app.route("/streamer/<id>/register")
+@app.route("/streamer/<streamer_id>/register")
 def register_streamer(streamer_id):
     pass
 
 
-@app.route("/streamer/<id>/product/<product_id>")
+@app.route("/streamer/<streamer_id>/purchase/<product_id>")
 def product_purchase(streamer_id, product_id):
     pass
+
+
+@app.route("/streamer/<streamer_id>/texts", methods=['GET'])
+@cross_origin(origin='localhost')
+def get_text_list(streamer_id):
+    return jsonify({"buttons": bubble.get_streamer_texts(streamer_id)})
+
+
+@app.route("/streamer/<streamer_id>/add", methods=['POST'])
+@cross_origin(origin='localhost')
+def add_text_to_streamer(streamer_id):
+    text = request.json["text"]
+    print(text)
+    if (text is None):
+        return jsonify(local_settings.RESPONSE_FAILURE)
+
+    bubble.add_text_choice(streamer_id, text)
+    return jsonify(local_settings.RESPONSE_SUCCESS)
 
 
 @app.route("/streamer/getId")
@@ -80,5 +94,4 @@ def sync(data):
 
 if __name__ == '__main__':
     log_setup(app, logger)
-    bubble_setup()
     socketio.run(app)

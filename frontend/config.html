@@ -20,11 +20,18 @@ or in the "license" file accompanying this file. This file is distributed on an 
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/common.css">
         <link rel="stylesheet" href="css/config.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     </head>
     <body>
-        <p>This is the config page!</p>
         <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
         <script src="js/common.js"></script>
         <script src="js/config.js"></script>
+        <div>
+            <p>Add new text box:</p>
+            <input type="text" id="text">
+            <button onclick=addChoice()>Add</button>
+            <div id="log">
+            </div>
+        </div>
     </body>
 </html>

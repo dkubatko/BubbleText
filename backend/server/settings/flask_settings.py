@@ -18,3 +18,8 @@ REQUEST_FORMAT = '%(asctime)s / %(name)s / %(levelname)s\n'\
 FLASK_APP_LOG_FORMAT = '%(asctime)s / %(name)s / %(levelname)s\n'\
         '| FILE: %(filename)s FUNCTION: %(funcName)s LINE: %(lineno)d |\nMESSAGE: %(message)s'
 FLASK_LOG_FILE = 'logs/flask_app.log'
+
+
+# Responses
+RESPONSE_SUCCESS = {"success": True}
+RESPONSE_FAILURE = {"success": False}
