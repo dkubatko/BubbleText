@@ -1,0 +1,27 @@
+2018-03-12 21:10:37,064 / flask_app / INFO
+| FILE: run.py FUNCTION: log_setup LINE: 46 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:11:18,399 / flask_app / INFO
+| FILE: run.py FUNCTION: log_setup LINE: 46 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:11:44,501 / flask_app / INFO
+| FILE: run.py FUNCTION: log_setup LINE: 46 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:11:51,525 / flask_app / INFO
+| FILE: run.py FUNCTION: log_setup LINE: 46 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:12:28,185 / flask_app / INFO
+| FILE: run.py FUNCTION: log_setup LINE: 46 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:12:40,563 / flask_app / INFO
+| FILE: run.py FUNCTION: log_setup LINE: 46 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:12:58,864 / flask_app / INFO
+| FILE: run.py FUNCTION: log_setup LINE: 46 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:14:31,382 / flask_app / INFO
+| FILE: run.py FUNCTION: log_setup LINE: 46 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:16:54,869 / flask_app / INFO
+| FILE: run.py FUNCTION: log_setup LINE: 46 |
+MESSAGE: Successfully set up logging

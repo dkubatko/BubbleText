@@ -1,0 +1,36 @@
+2018-03-12 21:05:05,035 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 43 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:09:26,755 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:10:37,064 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:11:18,399 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:11:44,501 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:11:51,525 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:12:28,186 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:12:40,564 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:12:58,864 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:14:31,382 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:16:54,869 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:16:54,870 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: __init__ LINE: 22 |
+MESSAGE: Connected to DB (HOST: localhost | PORT: 27017)

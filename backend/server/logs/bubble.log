@@ -1,0 +1,54 @@
+2018-03-12 21:10:37,064 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:11:18,399 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:11:44,501 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:11:51,525 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:11:51,527 / main.streamer / INFO
+| FILE: streamer.py FUNCTION: __init__ LINE: 39 |
+MESSAGE: Created new Streamer object with id: 123456
+2018-03-12 21:12:28,186 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:12:28,188 / main.streamer / INFO
+| FILE: streamer.py FUNCTION: __init__ LINE: 39 |
+MESSAGE: Created new Streamer object with id: 123456
+2018-03-12 21:12:40,564 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:12:40,566 / main.streamer / INFO
+| FILE: streamer.py FUNCTION: __init__ LINE: 39 |
+MESSAGE: Created new Streamer object with id: 123456
+2018-03-12 21:12:58,864 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:12:58,866 / main.streamer / INFO
+| FILE: streamer.py FUNCTION: __init__ LINE: 39 |
+MESSAGE: Created new Streamer object with id: 123456
+2018-03-12 21:14:31,382 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:14:31,384 / main.streamer / INFO
+| FILE: streamer.py FUNCTION: __init__ LINE: 39 |
+MESSAGE: Created new Streamer object with id: 123456
+2018-03-12 21:14:31,384 / main / INFO
+| FILE: bubble.py FUNCTION: load_from_db LINE: 53 |
+MESSAGE: Loaded 1 elements from the database
+2018-03-12 21:16:54,869 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: _log_setup LINE: 44 |
+MESSAGE: Successfully set up logging
+2018-03-12 21:16:54,870 / main.mongo / INFO
+| FILE: mongo.py FUNCTION: __init__ LINE: 22 |
+MESSAGE: Connected to DB (HOST: localhost | PORT: 27017)
+2018-03-12 21:16:54,872 / main.streamer / INFO
+| FILE: streamer.py FUNCTION: __init__ LINE: 39 |
+MESSAGE: Created new Streamer object with id: 123456
+2018-03-12 21:16:54,872 / main / INFO
+| FILE: bubble.py FUNCTION: load_from_db LINE: 53 |
+MESSAGE: Loaded 1 elements from the database
