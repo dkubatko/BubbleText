@@ -58,6 +58,27 @@ class Streamer:
         }
         self.text_choices.append(choice)
 
+    # Removes one text choice by id for the streamer
+    # returns False if not found True if found and updated
+    def remove_text_choice(self, text_id):
+        found = False
+        to_delete = None
+        for choice in self.text_choices:
+            if (choice["text_id"] == text_id):
+                found = True
+                to_delete = choice
+                continue
+
+            # If found, decrease all the upcoming ids by 1
+            if (found):
+                choice["text_id"] -= 1
+
+        if (found):
+            self.text_choices.remove(to_delete)
+            return True
+        else:
+            return False
+
     # Updates current text displayed
     def set_current_text_id(text_id):
         choice = (choice for choice in self.text_choices

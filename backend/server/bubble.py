@@ -2,7 +2,6 @@ from assets.streamer import Streamer
 from database.mongo import MongoWorker
 import settings.global_settings as global_settings
 import settings.bubble_settings as local_settings
-
 import logging
 
 
@@ -56,22 +55,22 @@ class Bubble():
     # Update existing streamer object in db
     def db_update_streamer(self, streamer_obj):
         coll = self.dbworker.get_streamers_collection()
-        for streamer in coll:
-            if streamer["streamer_id"] == streamer_obj.streamer_id:
-                coll.update_one(
-                    {"id": streamer["_id"]},
-                    {
-                        "$set": {
-                            streamer_obj.to_json()
-                        }
-                    }
-                )
-                # TODO self.logger()
+        # Updates all the streamers that have specific id (should be 1)
+        result = coll.update_many(
+            {"streamer_id": streamer_obj.streamer_id},
+            {
+                "$set": streamer_obj.to_json()
+            }
+        )
+        self.dbworker.logger.info(local_settings.LOG_DB_UPDATE
+                                  .format(result.modified_count,
+                                          streamer_obj.streamer_id))
 
-    # Inserts new streamer object
+    # Inserts new streamer object into db
     def db_insert_new_streamer(self, streamer):
-        # TODO
         s = streamer.to_json()
+        coll = self.dbworker.get_streamers_collection()
+        coll.insert_one(s)
 
     # Returns list of streamer's preset texts
     def get_streamer_texts(self, streamer_id):
@@ -92,8 +91,36 @@ class Bubble():
         streamer = self.find_streamer_by_id(streamer_id)
 
         if (streamer is None):
-            # TODO self.logger()
-            return
+            self.logger.error(local_settings.
+                              LOG_STREAMER_NOT_FOUND.format(streamer_id))
+            return False
 
         streamer.add_text_choice(text)
-        # self.db_update_streamer(streamer)
+        self.db_update_streamer(streamer)
+        return True
+
+    # Removes text choice from the specified streamer
+    def remove_text_choice(self, streamer_id, text_id):
+        streamer = self.find_streamer_by_id(streamer_id)
+
+        if (streamer is None):
+            self.logger.error(local_settings.
+                              LOG_STREAMER_NOT_FOUND.format(streamer_id))
+            return False
+
+        ok = streamer.remove_text_choice(text_id)
+        self.db_update_streamer(streamer)
+        if (ok):
+            return True
+        else:
+            return False
+
+    def get_curr_text(self, streamer_id):
+        streamer = self.find_streamer_by_id(streamer_id)
+
+        if (streamer is None):
+            self.logger.error(local_settings.
+                              LOG_STREAMER_NOT_FOUND.format(streamer_id))
+            return None
+
+        return streamer.curr_text

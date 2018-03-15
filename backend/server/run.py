@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask.ext.cors import CORS, cross_origin
 from flask_socketio import SocketIO, join_room, leave_room, send, emit
 from bubble import Bubble
@@ -6,7 +6,7 @@ import settings.flask_settings as local_settings
 import settings.global_settings as global_settings
 import logging
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='frontend')
 # app.config['SECRET_KEY']
 socketio = SocketIO(app)
 logger = logging.getLogger('flask_app')
@@ -73,24 +73,47 @@ def get_text_list(streamer_id):
 @cross_origin(origin='localhost')
 def add_text_to_streamer(streamer_id):
     text = request.json["text"]
-    print(text)
     if (text is None):
         return jsonify(local_settings.RESPONSE_FAILURE)
 
-    bubble.add_text_choice(streamer_id, text)
-    return jsonify(local_settings.RESPONSE_SUCCESS)
+    ok = bubble.add_text_choice(streamer_id, text)
+    if (ok):
+        return jsonify(local_settings.RESPONSE_SUCCESS)
+    else:
+        return jsonify(local_settings.RESPONSE_FAILURE)
 
+@app.route("/streamer/<streamer_id>/delete", methods=['POST'])
+@cross_origin(origin='localhost')
+def remove_text_from_streamer(streamer_id):
+    text_id = int(request.json["text_id"])
+
+    if (text_id is None):
+        return jsonify(local_settings.RESPONSE_FAILURE)
+
+    ok = bubble.remove_text_choice(streamer_id, text_id)
+    if (ok):
+        return jsonify(local_settings.RESPONSE_SUCCESS)
+    else:
+        return jsonify(local_settings.RESPONSE_FAILURE)
 
 @app.route("/streamer/getId")
 def get_id():
     return
 
+@app.route("/display/<streamer_id>")
+def display_bubble(streamer_id):
+    return render_template("bubble.html", streamer_id=streamer_id)
 
 @socketio.on("sync")
 def sync(data):
-    if (verify(data['key'])):
-        join_room(data['streamer_id'])
+    print("Sync request!")
+    print(data)
+    text = bubble.get_curr_text(data['id'])
 
+    if (text is not None):
+        emit('update', {'text':text})
+    else:
+        emit('update', {'text':'notext'})
 
 if __name__ == '__main__':
     log_setup(app, logger)

@@ -1,0 +1,34 @@
+<html lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{url_for('static', filename='styles/bubble.css')}}">
+        <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy" rel="stylesheet">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+        <script>
+            $(document).ready(setUp());
+
+            function setUp() {
+                var socket = io.connect('http://localhost:5000');
+                socket.on('connect', function() {
+                    socket.emit('sync', {'id': {{ streamer_id }} });
+                });
+                socket.on('update', function(data) {
+                    alert(data);
+                    console.log(data);
+                });
+            }
+        </script>
+    </head>
+    <body>
+        <div class="main">
+            <img class="bubble" src="{{url_for('static', filename='bubble.png')}}" width="400" height="300">
+            <div class="center">
+                <p id="nickname">drazzzer:</p>
+                <p id="text">Hey all!</p>
+            </div>   
+        </div>
+    </body>
+</html>
