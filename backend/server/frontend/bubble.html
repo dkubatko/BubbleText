@@ -16,8 +16,7 @@
                     socket.emit('sync', {'id': {{ streamer_id }} });
                 });
                 socket.on('update', function(data) {
-                    alert(data);
-                    console.log(data);
+                    $("#text").text(data["text"]);
                 });
             }
         </script>

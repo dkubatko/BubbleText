@@ -82,7 +82,7 @@ class Bubble():
     # Find streamer object by id
     def find_streamer_by_id(self, streamer_id):
         for streamer in self.streamers:
-            if streamer.streamer_id == streamer_id:
+            if str(streamer.streamer_id) == str(streamer_id):
                 return streamer
         return None
 
