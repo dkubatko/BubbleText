@@ -25,7 +25,7 @@ $(document).ready(function() {
              populateButtons(data);   
             },
         }
-    )
+    );
 });
 
 function populateButtons(data) {
@@ -68,5 +68,16 @@ function choice(id) {
 }
 
 function purchase() {
-    alert("Purchasing product #" + curr_choice);
+    $.ajax(
+        {
+            url: "http://127.0.0.1:5000/streamer/123456/purchase",
+            type: "POST",
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify({"text_id": curr_choice}),
+            success: function(data) {
+             alert(data);
+             console.log(data);
+            },
+        }
+    );
 }

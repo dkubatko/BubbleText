@@ -80,11 +80,18 @@ class Streamer:
             return False
 
     # Updates current text displayed
-    def set_current_text_id(text_id):
-        choice = (choice for choice in self.text_choices
-                  if choice["text_id"] == text_id).next()
+    def set_curr_text(self, text_id):
+        choice = [choice for choice in self.text_choices
+                  if str(choice["text_id"]) == str(text_id)]
+
+        if (len(choice) == 0):
+            return False
+
+        choice = choice[0]
+
         self.curr_text_id = choice["text_id"]
         self.curr_text = choice["text"]
+        return True
 
     def to_json(self):
         return {

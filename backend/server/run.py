@@ -96,6 +96,25 @@ def remove_text_from_streamer(streamer_id):
     else:
         return jsonify(local_settings.RESPONSE_FAILURE)
 
+def verify_transaction():
+    return True
+
+@app.route("/streamer/<streamer_id>/purchase", methods=['POST'])
+@cross_origin(origin='localhost')
+def transaction_complete(streamer_id):
+    if (not verify_transaction()):
+        return
+
+    text_id = request.json['text_id']
+
+    ok = bubble.set_curr_text(streamer_id, text_id)
+    if (ok):
+        text = bubble.get_curr_text(streamer_id)
+        socketio.emit("update", {'text': text}, room=streamer_id)
+        return jsonify(local_settings.RESPONSE_SUCCESS)
+    else:
+        return jsonify(local_settings.RESPONSE_FAILURE)
+
 @app.route("/streamer/getId")
 def get_id():
     return
@@ -106,14 +125,19 @@ def display_bubble(streamer_id):
 
 @socketio.on("sync")
 def sync(data):
-    print("Sync request!")
-    print(data)
-    text = bubble.get_curr_text(data['id'])
+    if ('id' not in data.keys()):
+        return
+
+    streamer_id = str(data['id'])
+    text = bubble.get_curr_text(streamer_id)
+
+    print("Joined room" + streamer_id)
+    join_room(str(streamer_id))
 
     if (text is not None):
         emit('update', {'text':text})
     else:
-        emit('update', {'text':'notext'})
+        emit('update', {'text':'No text'})
 
 if __name__ == '__main__':
     log_setup(app, logger)

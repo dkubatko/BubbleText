@@ -109,12 +109,14 @@ class Bubble():
             return False
 
         ok = streamer.remove_text_choice(text_id)
-        self.db_update_streamer(streamer)
+
         if (ok):
+            self.db_update_streamer(streamer)
             return True
         else:
             return False
 
+    # Get current text displayed
     def get_curr_text(self, streamer_id):
         streamer = self.find_streamer_by_id(streamer_id)
 
@@ -124,3 +126,20 @@ class Bubble():
             return None
 
         return streamer.curr_text
+
+    # Set current text displayed
+    def set_curr_text(self, streamer_id, text_id):
+        streamer = self.find_streamer_by_id(streamer_id)
+
+        if (streamer is None):
+            self.logger.error(local_settings.
+                              LOG_STREAMER_NOT_FOUND.format(streamer_id))
+            return False
+
+        ok = streamer.set_curr_text(text_id)
+
+        if (ok):
+            self.db_update_streamer(streamer)
+            return True
+        else:
+            return False
