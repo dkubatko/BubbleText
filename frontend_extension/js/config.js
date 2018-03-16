@@ -17,14 +17,37 @@ or in the "license" file accompanying this file. This file is distributed on an 
 $(document).ready(function() {
     $.ajax(
         {
-            url: "http://127.0.0.1:5000/streamer/123456/texts",
+            url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/registered",
             type: "GET",
             success: function(data) {
-             populateButtons(data);   
+                if (data.success == false) {
+                    console.log("HERE!")
+                    $("#register").show();
+                } else {
+                    $("#main").show();
+                    updateButtons();
+                }
             },
         }
     )
 });
+
+function register() {
+    $.ajax(
+        {
+            url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/register",
+            type: "GET",
+            success: function(data) {
+                console.log(data);
+                if (data.success == true) {
+                    updateButtons();
+                    $("#register").hide();
+                    $("#main").show();
+                }
+            }
+        }
+    )
+}
 
 function updateButtons() {
     // clear buttons
@@ -32,9 +55,10 @@ function updateButtons() {
     // reload buttons
     $.ajax(
         {
-            url: "http://127.0.0.1:5000/streamer/123456/texts",
+            url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/texts",
             type: "GET",
             success: function(data) {
+                console.log(data);
              populateButtons(data);   
             },
         }
@@ -61,7 +85,7 @@ function addChoice() {
     if (text) {
         $.ajax(
         {
-            url: "http://127.0.0.1:5000/streamer/123456/add",
+            url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/add",
             type: "POST",
             contentType: "application/json;charset=UTF-8",
             data: JSON.stringify({"text": text}),
@@ -77,7 +101,7 @@ function addChoice() {
 function deleteChoice(choice) {
     $.ajax(
         {
-            url: "http://127.0.0.1:5000/streamer/123456/delete",
+            url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/delete",
             type: "POST",
             contentType: "application/json;charset=UTF-8",
             data: JSON.stringify({"text_id": choice}),

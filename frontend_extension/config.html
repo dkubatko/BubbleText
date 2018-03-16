@@ -26,7 +26,10 @@ or in the "license" file accompanying this file. This file is distributed on an 
         <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
         <script src="js/common.js"></script>
         <script src="js/config.js"></script>
-        <div>
+        <div id="register" style="display:none;">
+            <button class="button" onclick=register()>Register</button>
+        </div>
+        <div id="main" style="display:none;">
             <p>Add new text box:</p>
             <input type="text" id="text">
             <button onclick=addChoice()>Add</button>

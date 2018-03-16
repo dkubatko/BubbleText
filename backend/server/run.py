@@ -5,13 +5,21 @@ from bubble import Bubble
 import settings.flask_settings as local_settings
 import settings.global_settings as global_settings
 import logging
+from assets.twitchapi import TwitchAPI
 
 app = Flask(__name__, template_folder='frontend')
 # app.config['SECRET_KEY']
 socketio = SocketIO(app)
 logger = logging.getLogger('flask_app')
 bubble = Bubble(True)
+TwitchAPI.generate_oauth()
 
+# PRETTIFY CONFIG PAGE
+# GENERATE TOKEN FOR VIEW PAGE
+# LIMIT NUMBER OF TEXT CHOICES
+# ? TEXT CHOICE
+# JWT TOKEN
+# ANIMATION FOR BUBBLE
 
 def log_setup(app, logger):
     log_f = logging.FileHandler(local_settings.FLASK_LOG_FILE)
@@ -51,12 +59,6 @@ def log_setup(app, logger):
 @app.route("/")
 def hello():
     return "Hello world"
-
-
-@app.route("/streamer/<streamer_id>/register")
-def register_streamer(streamer_id):
-    pass
-
 
 @app.route("/streamer/<streamer_id>/purchase/<product_id>")
 def product_purchase(streamer_id, product_id):
@@ -115,9 +117,25 @@ def transaction_complete(streamer_id):
     else:
         return jsonify(local_settings.RESPONSE_FAILURE)
 
-@app.route("/streamer/getId")
-def get_id():
-    return
+@app.route("/streamer/<streamer_id>/registered")
+@cross_origin(origin='localhost')
+def is_registered(streamer_id):
+    streamer = bubble.find_streamer_by_id(streamer_id)
+
+    if (streamer is not None):
+        return jsonify(local_settings.RESPONSE_SUCCESS)
+    else:
+        return jsonify(local_settings.RESPONSE_FAILURE)
+
+@app.route("/streamer/<streamer_id>/register")
+@cross_origin(origin='localhost')
+def register(streamer_id):
+    ok = bubble.add_streamer(streamer_id)
+
+    if (ok):
+        return jsonify(local_settings.RESPONSE_SUCCESS)
+    else:
+        return jsonify(local_settings.RESPONSE_FAILURE)
 
 @app.route("/display/<streamer_id>")
 def display_bubble(streamer_id):

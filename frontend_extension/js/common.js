@@ -13,6 +13,7 @@ or in the "license" file accompanying this file. This file is distributed on an 
   Set Javascript common to all extension views in this file.
 
 */
+var streamer_id = "44322889"
 
 if(window.Twitch.ext) {
 

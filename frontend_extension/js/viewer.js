@@ -19,7 +19,7 @@ var curr_choice = -1;
 $(document).ready(function() {
     $.ajax(
         {
-            url: "http://127.0.0.1:5000/streamer/123456/texts",
+            url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/texts",
             type: "GET",
             success: function(data) {
              populateButtons(data);   
@@ -70,7 +70,7 @@ function choice(id) {
 function purchase() {
     $.ajax(
         {
-            url: "http://127.0.0.1:5000/streamer/123456/purchase",
+            url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/purchase",
             type: "POST",
             contentType: "application/json;charset=UTF-8",
             data: JSON.stringify({"text_id": curr_choice}),

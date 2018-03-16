@@ -6,3 +6,5 @@ LOG_FORMATTER = '%(asctime)s / %(name)s / %(levelname)s\n'\
 LOG_DB_LOAD_SUCCESS = "Loaded {0} elements from the database"
 LOG_DB_UPDATE = "Updated {0} streamer(s) with id {1}"
 LOG_STREAMER_NOT_FOUND = "Streamer (id: {0}) not found"
+
+DEFAULT_TEXT = "Hello world"

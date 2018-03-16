@@ -72,6 +72,15 @@ class Bubble():
         coll = self.dbworker.get_streamers_collection()
         coll.insert_one(s)
 
+    def add_streamer(self, streamer_id):
+        s = Streamer(streamer_id)
+        s.add_text_choice(local_settings.DEFAULT_TEXT)
+        s.set_curr_text(0)
+
+        self.streamers.append(s)
+        # self.db_insert_new_streamer(s)
+        return True
+
     # Returns list of streamer's preset texts
     def get_streamer_texts(self, streamer_id):
         for streamer in self.streamers:

@@ -1,5 +1,6 @@
 import settings.global_settings as global_settings
 import settings.streamer_settings as local_settings
+from assets.twitchapi import TwitchAPI
 import logging
 
 class Streamer:
@@ -43,7 +44,15 @@ class Streamer:
 
     # TODO
     def get_streamer_display_name(self):
-        return ""
+        result = TwitchAPI.get_streamer_info(self.streamer_id)
+
+        if (result is None):
+            print("FAILURE")
+            return ""
+
+        print("SUCCESS " + result["display_name"])
+
+        return result["display_name"]
 
     # Adds multiple text choices for the streamer
     def add_text_choices(self, texts):
