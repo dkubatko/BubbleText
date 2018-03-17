@@ -1,7 +1,9 @@
 import settings.global_settings as global_settings
 import settings.streamer_settings as local_settings
 from assets.twitchapi import TwitchAPI
+from assets.tokens import Tokens
 import logging
+
 
 class Streamer:
     logger = None
@@ -16,12 +18,14 @@ class Streamer:
     curr_text_id = None
     # List of dict
     text_choices = None
+    # String token to access view page
+    token = None
 
     # In memory vars
     room_name = None
 
     def __init__(self, streamer_id, display_name="", curr_text="",
-                 curr_text_id=-1, text_choices=[]):
+                 curr_text_id=-1, text_choices=[], token=""):
         self._log_setup()
 
         # initialize all fields
@@ -34,10 +38,18 @@ class Streamer:
         self.curr_text_id = curr_text_id
         self.text_choices = text_choices
 
+        if (token == ""):
+            self.token = Tokens.generateToken()
+            self.logger.info(local_settings.LOG_TOKEN_GENERATED.format(
+                self.token, self.streamer_id))
+        else:
+            self.token = token
+
         # socketio room name
         self.room_name = streamer_id
 
-        self.logger.info(local_settings.LOG_STREAMER_CREATED.format(streamer_id))
+        self.logger.info(
+            local_settings.LOG_STREAMER_CREATED.format(streamer_id))
 
     def _log_setup(self):
         self.logger = logging.getLogger('main.streamer')
@@ -61,11 +73,17 @@ class Streamer:
 
     # Adds one text choice for the streamer
     def add_text_choice(self, text):
+        if (len(self.text_choices) >= local_settings.STREAMER_CHOICE_LIMIT):
+            self.logger.info(
+                local_settings.LOG_CHOICE_LIMIT_REACHED.format(self.streamer_id))
+            return False
+
         choice = {
             "text_id": len(self.text_choices),
             "text": text
         }
         self.text_choices.append(choice)
+        return True
 
     # Removes one text choice by id for the streamer
     # returns False if not found True if found and updated
@@ -108,5 +126,6 @@ class Streamer:
             "display_name": self.display_name,
             "curr_text": self.curr_text,
             "curr_text_id": self.curr_text_id,
-            "text_choices": self.text_choices
+            "text_choices": self.text_choices,
+            "token": self.token
         }

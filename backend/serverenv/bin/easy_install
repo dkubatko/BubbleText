@@ -1,4 +1,4 @@
-#!/home/drazzzer/Projects/Twitch/backend/serverenv/bin/python3
+#!/home/drazzzer/Projects/BubbleText/backend/serverenv/bin/python3.6
 
 # -*- coding: utf-8 -*-
 import re

@@ -1,4 +1,4 @@
-#!/home/drazzzer/Projects/Twitch/backend/serverenv/bin/python
+#!/home/drazzzer/Projects/BubbleText/backend/serverenv/bin/python
 
 import sys
 import getopt

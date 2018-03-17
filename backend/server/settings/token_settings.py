@@ -1,0 +1,1 @@
+TOKEN_BITS_USED = 16

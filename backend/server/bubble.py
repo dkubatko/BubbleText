@@ -104,7 +104,11 @@ class Bubble():
                               LOG_STREAMER_NOT_FOUND.format(streamer_id))
             return False
 
-        streamer.add_text_choice(text)
+        ok = streamer.add_text_choice(text)
+
+        if (not ok):
+            return False
+
         self.db_update_streamer(streamer)
         return True
 

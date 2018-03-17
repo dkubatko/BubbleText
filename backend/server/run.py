@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request, render_template
-from flask.ext.cors import CORS, cross_origin
+from flask_cors import CORS, cross_origin
 from flask_socketio import SocketIO, join_room, leave_room, send, emit
 from bubble import Bubble
 import settings.flask_settings as local_settings
