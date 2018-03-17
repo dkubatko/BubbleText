@@ -1,0 +1,3 @@
+JWT_SECRET = "n6f5ppfzfc07zoo5np9eharzo84oyz"
+EXP_TIME = 3600
+JWT_USER_ID = "43665292"
