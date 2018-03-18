@@ -15,13 +15,15 @@ or in the "license" file accompanying this file. This file is distributed on an 
 */
 
 body {
-	font: 12px arial, sans-serif;
+	font-family: 'Rubik', sans-serif;
+    font-size: 20px;
 }
 div {
 	margin: 0px;
 }
 
 button.button {
+    font-family: 'Rubik', sans-serif;
     background-color: #4F2AAA;
     border: none;
     color: #FFFFFF;
@@ -51,8 +53,46 @@ button.delete {
 }
 
 div.btndiv {
-    margin: 10px;
+    margin: 1%;
     display: inline-block;
     overflow: visible;
     position: relative;
+}
+
+button.add {
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-left: -1%;
+}
+
+input.textinput {
+    font-family: 'Rubik', sans-serif;
+    width: 300px;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 2px solid #4F2AAA;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin: 1%;
+}
+
+div.link-box {
+    background-color: #4F2AAA;
+    margin: 10px;
+    padding: 12px 40px;
+    border-radius: 80px;
+    width: 260px;
+    text-overflow: ellipsis;
+    text-align: center;
+    color: white;
+}
+
+a#link {
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-decoration: none;
+    color: white;
 }

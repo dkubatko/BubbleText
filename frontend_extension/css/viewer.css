@@ -15,13 +15,14 @@ or in the "license" file accompanying this file. This file is distributed on an 
 */
 
 body {
-	font: 12px arial, sans-serif;
+	font-family: 'Rubik', sans-serif;
 }
 div {
 	margin: 0px;
 }
 
 button.button {
+    font-family: 'Rubik', sans-serif;
     background-color: #4F2AAA;
     border: none;
     color: #FFFFFF;

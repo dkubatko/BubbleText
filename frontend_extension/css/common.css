@@ -14,8 +14,11 @@ or in the "license" file accompanying this file. This file is distributed on an 
 
 */
 
+@import url("https://fonts.googleapis.com/css?family=Rubik");
+
 body {
-	font: 12px arial, sans-serif;
+	font-family: 'Luckiest Guy', cursive;
+    font-size: 30px;
 }
 div {
 	margin: 0px;

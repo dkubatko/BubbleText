@@ -14,7 +14,7 @@ or in the "license" file accompanying this file. This file is distributed on an 
 
 */
 var streamer_id = "44322889"
-
+var jwt_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYnJvYWRjYXN0ZXIifQ.Etallfv18Wfo3QgDENVtGWBvdNgun9UWRXljef_uYFM"
 if(window.Twitch.ext) {
 
   window.Twitch.ext.onAuthorized(function(auth) {

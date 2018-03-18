@@ -15,12 +15,16 @@ or in the "license" file accompanying this file. This file is distributed on an 
 */
 
 var curr_choice = -1;
+var jwt_token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoidmlld2VyIn0.6EDQfXtBxUNkN_nXqGBUbYncOYt-mOtt4yod23En-L8"
 
 $(document).ready(function() {
     $.ajax(
         {
             url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/texts",
             type: "GET",
+            headers: {
+                "Authorization": jwt_token,
+            },
             success: function(data) {
              populateButtons(data);   
             },
@@ -72,11 +76,13 @@ function purchase() {
         {
             url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/purchase",
             type: "POST",
+            headers: {
+                "Authorization": jwt_token,
+            },
             contentType: "application/json;charset=UTF-8",
             data: JSON.stringify({"text_id": curr_choice}),
             success: function(data) {
-             alert(data);
-             console.log(data);
+             alert("Success");
             },
         }
     );

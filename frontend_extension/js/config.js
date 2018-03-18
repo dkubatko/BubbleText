@@ -19,13 +19,16 @@ $(document).ready(function() {
         {
             url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/registered",
             type: "GET",
+            headers: {
+                "Authorization": jwt_token,
+            },
             success: function(data) {
                 if (data.success == false) {
-                    console.log("HERE!")
                     $("#register").show();
                 } else {
                     $("#main").show();
                     updateButtons();
+                    getDisplayLink();
                 }
             },
         }
@@ -37,16 +40,38 @@ function register() {
         {
             url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/register",
             type: "GET",
+            headers: {
+                "Authorization": jwt_token,
+            },
             success: function(data) {
-                console.log(data);
                 if (data.success == true) {
                     updateButtons();
+                    getDisplayLink();
                     $("#register").hide();
                     $("#main").show();
                 }
             }
         }
     )
+}
+
+function getDisplayLink() {
+    $.ajax(
+        {
+            url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/url",
+            type: "GET",
+            headers: {
+                "Authorization": jwt_token,
+            },
+            success: function(data) {
+                if (data.success === "true") {
+                    var url = "127.0.0.1:5000" + data.url;
+                    $("#link").text(url);
+                    $("#link").attr("href", "http://" + url);
+                }
+            },
+        }
+    );
 }
 
 function updateButtons() {
@@ -57,12 +82,14 @@ function updateButtons() {
         {
             url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/texts",
             type: "GET",
+            headers: {
+                "Authorization": jwt_token,
+            },
             success: function(data) {
-                console.log(data);
              populateButtons(data);   
             },
         }
-    )
+    );
 }
 
 function populateButtons(data) {
@@ -72,7 +99,6 @@ function populateButtons(data) {
         $delete.attr("onclick", "deleteChoice(" + data.buttons[i].text_id + ")");
         var $btn = $("<button class='button'></button>");
         $btn.attr("id", String(data.buttons[i].text_id));
-//        $btn.attr("onclick", "choice(" + data.buttons[i].text_id + ")");
         $btn.text(data.buttons[i].text);
         $div_wrapper.append($delete);
         $div_wrapper.append($btn)
@@ -87,11 +113,14 @@ function addChoice() {
         {
             url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/add",
             type: "POST",
+            headers: {
+                "Authorization": jwt_token,
+            },
             contentType: "application/json;charset=UTF-8",
             data: JSON.stringify({"text": text}),
             success: function(data) {
+                $("#text").val("");
                 updateButtons();
-                $("#log").append("Deleted " + text + " with success " + data.success + "<br>");
             },
         }
     )
@@ -103,11 +132,13 @@ function deleteChoice(choice) {
         {
             url: "http://127.0.0.1:5000/streamer/" + streamer_id + "/delete",
             type: "POST",
+            headers: {
+                "Authorization": jwt_token,
+            },
             contentType: "application/json;charset=UTF-8",
             data: JSON.stringify({"text_id": choice}),
             success: function(data) {
                 updateButtons();
-             $("#log").append("Removed " + choice + " with success " + data.success + "<br>");
             },
         }
     )

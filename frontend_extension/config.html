@@ -30,12 +30,13 @@ or in the "license" file accompanying this file. This file is distributed on an 
             <button class="button" onclick=register()>Register</button>
         </div>
         <div id="main" style="display:none;">
-            <p>Add new text box:</p>
-            <input type="text" id="text">
-            <button onclick=addChoice()>Add</button>
+            <input class="textinput" type="text" id="text" maxlength="20">
+            <button onclick=addChoice() class="button add">Add</button>
             <div id="buttons">
             </div>
-            <div id="log">
+            <div class="link-box">
+                Your link:
+                <a target="_blank" id="link"></a>
             </div>
         </div>
     </body>

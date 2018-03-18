@@ -156,3 +156,26 @@ class Bubble():
             return True
         else:
             return False
+
+    # returns token for a streamer
+    def get_token(self, streamer_id):
+        streamer = self.find_streamer_by_id(streamer_id)
+
+        if (streamer is None):
+            self.logger.error(local_settings.
+                              LOG_STREAMER_NOT_FOUND.format(streamer_id))
+            return None
+
+        return streamer.token
+
+
+    # Verifies token for the streamer
+    def verify_token(self, streamer_id, token):
+        streamer = self.find_streamer_by_id(streamer_id)
+
+        if (streamer is None):
+            self.logger.error(local_settings.
+                              LOG_STREAMER_NOT_FOUND.format(streamer_id))
+            return False
+
+        return streamer.token == token

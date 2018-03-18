@@ -39,7 +39,7 @@ class Streamer:
         self.text_choices = text_choices
 
         if (token == ""):
-            self.token = Tokens.generateToken()
+            self.token = Tokens.generate_token()
             self.logger.info(local_settings.LOG_TOKEN_GENERATED.format(
                 self.token, self.streamer_id))
         else:
