@@ -7,6 +7,7 @@ import settings.global_settings as global_settings
 import logging
 from assets.twitchapi import TwitchAPI
 from assets.jwtworker import JWTworker
+from assets.profanity_filter import ProfanityFilter
 
 app = Flask(__name__, template_folder='frontend')
 # app.config['SECRET_KEY']
@@ -76,6 +77,8 @@ def add_text_to_streamer(streamer_id):
     text = request.json["text"]
     if (text is None):
         return jsonify(local_settings.RESPONSE_FAILURE)
+
+    text = ProfanityFilter.filter(text)
 
     ok = bubble.add_text_choice(streamer_id, text)
     if (ok):
