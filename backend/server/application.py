@@ -62,13 +62,12 @@ def log_setup(app, logger):
 
 # API part
 
-
 @application.route("/")
 def hello():
     return "Hello friend! Ask me something. I will never respond."
 
 
-@application.route("/streamer/<streamer_id>/save_config", methods=['POST'])
+@application.route("/api/streamer/<streamer_id>/save_config", methods=['POST'])
 @cross_origin(origin='localhost')
 def save_config(streamer_id):
     auth_token = request.headers.get("Authorization")
@@ -83,50 +82,18 @@ def save_config(streamer_id):
     if (config is None):
         return jsonify(local_settings.RESPONSE_FAILURE)
 
-    ok = bubble.update_streamer_config(streamer_id, config)
+    ok, error = bubble.update_streamer_config(streamer_id, config)
 
     if (ok):
         config = bubble.get_streamer_config(streamer_id)
         return jsonify({"success": True, "data": config})
     else:
-        return jsonify(local_settings.RESPONSE_FAILURE)
+        resp = local_settings.RESPONSE_FAILURE
+        resp["error"] = error
+        return jsonify(resp)
 
 
-# @application.route("/streamer/<streamer_id>/delete", methods=['POST'])
-# @cross_origin(origin='localhost')
-# def remove_text_from_streamer(streamer_id):
-#     auth_token = request.headers.get("Authorization")
-#     if (not JWTworker.verify_token(auth_token)):
-#         abort(401)
-
-#     text_id = int(request.json["text_id"])
-
-#     if (text_id is None):
-#         return jsonify(local_settings.RESPONSE_FAILURE)
-
-#     ok = bubble.remove_text_choice(streamer_id, text_id)
-#     if (ok):
-#         return jsonify(local_settings.RESPONSE_SUCCESS)
-#     else:
-#         return jsonify(local_settings.RESPONSE_FAILURE)
-
-
-# @application.route("/streamer/<streamer_id>/registered")
-# @cross_origin(origin='localhost')
-# def is_registered(streamer_id):
-#     auth_token = request.headers.get("Authorization")
-#     if (not JWTworker.verify_token(auth_token)):
-#         abort(401)
-
-#     streamer = bubble.find_streamer_by_id(streamer_id)
-
-#     if (streamer is not None):
-#         return jsonify(local_settings.RESPONSE_SUCCESS)
-#     else:
-#         return jsonify(local_settings.RESPONSE_FAILURE)
-
-
-@application.route("/streamer/<streamer_id>/get_config", methods=['GET'])
+@application.route("/api/streamer/<streamer_id>/get_config", methods=['GET'])
 @cross_origin(origin='localhost')
 def get_config(streamer_id):
     auth_token = request.headers.get("Authorization")
@@ -137,9 +104,13 @@ def get_config(streamer_id):
 
     if (config["registered"]):
         token = bubble.get_streamer_token(streamer_id)
-        url = url_for("display_bubble", streamer_id=streamer_id) + \
-            "?token=" + token
-        config["link"] = url
+
+        if (token is not None):
+            url = url_for("display_bubble", streamer_id=streamer_id) + \
+                "?token=" + token
+            config["link"] = url
+        else:
+            config["link"] = ""
 
     return jsonify(config)
 
@@ -147,23 +118,7 @@ def get_config(streamer_id):
 def verify_transaction():
     return True
 
-
-# @application.route("/streamer/<streamer_id>/register")
-# @cross_origin(origin='localhost')
-# def register(streamer_id):
-#     auth_token = request.headers.get("Authorization")
-#     if (not JWTworker.verify_token(auth_token)):
-#         abort(401)
-
-#     ok = bubble.add_streamer(streamer_id)
-
-#     if (ok):
-#         return jsonify(local_settings.RESPONSE_SUCCESS)
-#     else:
-#         return jsonify(local_settings.RESPONSE_FAILURE)
-
-
-@application.route("/streamer/<streamer_id>/purchase", methods=['POST'])
+@application.route("/api/streamer/<streamer_id>/purchase", methods=['POST'])
 @cross_origin(origin='localhost')
 def transaction_complete(streamer_id):
     auth_token = request.headers.get("Authorization")
@@ -178,7 +133,7 @@ def transaction_complete(streamer_id):
 
     data = request.json.get('data')
 
-    ok = bubble.update_streamer_curr_diplay(
+    ok, error = bubble.update_streamer_curr_diplay(
         streamer_id, data['text_id'], data['animation_id'],
         data['bubble_id'], data['buyer_id'])
 
@@ -187,22 +142,9 @@ def transaction_complete(streamer_id):
         socketio.emit("update", data, room=streamer_id)
         return jsonify(local_settings.RESPONSE_SUCCESS)
     else:
+        resp = local_settings.RESPONSE_FAILURE
+        resp["error"] = error
         return jsonify(local_settings.RESPONSE_FAILURE)
-
-
-# @application.route("/streamer/<streamer_id>/url", methods=['GET'])
-# @cross_origin(origin='localhost')
-# def get_streamer_url(streamer_id):
-#     auth_token = request.headers.get("Authorization")
-#     if (not JWTworker.verify_token(auth_token, roles=["broadcaster"])):
-#         abort(401)
-
-#     token = bubble.get_token(streamer_id)
-#     if (token is None):
-#         return jsonify(local_settings.RESPONSE_FAILURE)
-
-#     url = url_for("display_bubble", streamer_id=streamer_id) + "?token=" + token
-#     return jsonify({"success": "true", "url": url})
 
 
 # Display part

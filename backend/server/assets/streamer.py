@@ -91,7 +91,7 @@ class Streamer:
     # Find text by id and set it to curr
     def set_curr_text_id(self, text_id):
         for text in self.texts:
-            if (text["text_id"] == text_id):
+            if (text["id"] == text_id):
                 self.curr_text_id = text_id
                 return True
         return False
@@ -99,7 +99,7 @@ class Streamer:
     # Find animation by id and set it to curr
     def set_curr_animation_id(self, animation_id):
         for animation in self.animations:
-            if (animation["animation_id"] == animation_id):
+            if (animation["id"] == animation_id):
                 self.curr_animation_id = animation_id
                 return True
         return False
@@ -107,7 +107,7 @@ class Streamer:
     # Find bubble by id and set it to curr
     def set_curr_bubble_id(self, bubble_id):
         for bubble in self.bubbles:
-            if (bubble["bubble_id"] == bubble_id):
+            if (bubble["id"] == bubble_id):
                 self.curr_bubble_id = bubble_id
                 return True
         return False
