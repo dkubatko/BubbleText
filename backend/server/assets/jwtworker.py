@@ -42,6 +42,9 @@ class JWTworker:
 
     @classmethod
     def verify_token(cls, incoming_token, roles=["broadcaster"]):
+        if ("Bearer" in incoming_token):
+            incoming_token = incoming_token.split(" ")[1]
+
         payload = cls.decode_payload(incoming_token)
         if ('role' not in payload.keys()):
             return False

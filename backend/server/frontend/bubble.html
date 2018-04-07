@@ -16,7 +16,8 @@
                     socket.emit('sync', {'id': {{ streamer_id }} });
                 });
                 socket.on('update', function(data) {
-                    $("#text").text(data["text"]);
+                    alert("Recieved data");
+                    console.log(data);
                 });
             }
         </script>

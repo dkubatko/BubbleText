@@ -5,6 +5,7 @@ from bubble import Bubble
 import settings.flask_settings as local_settings
 import settings.global_settings as global_settings
 import logging
+from assets.streamer import Streamer
 from assets.twitchapi import TwitchAPI
 from assets.jwtworker import JWTworker
 from assets.profanity_filter import ProfanityFilter
@@ -67,87 +68,99 @@ def hello():
     return "Hello friend! Ask me something. I will never respond."
 
 
-@app.route("/streamer/<streamer_id>/add", methods=['POST'])
+@app.route("/streamer/<streamer_id>/save_config", methods=['POST'])
 @cross_origin(origin='localhost')
-def add_text_to_streamer(streamer_id):
+def save_config(streamer_id):
     auth_token = request.headers.get("Authorization")
     if (not JWTworker.verify_token(auth_token)):
         abort(401)
 
-    text = request.json["text"]
-    if (text is None):
+    if (not request.data):
         return jsonify(local_settings.RESPONSE_FAILURE)
 
-    text = ProfanityFilter.filter(text)
+    config = request.json.get("data")
 
-    ok = bubble.add_text_choice(streamer_id, text)
+    if (config is None):
+        return jsonify(local_settings.RESPONSE_FAILURE)
+
+    ok = bubble.update_streamer_config(streamer_id, config)
+
     if (ok):
-        return jsonify(local_settings.RESPONSE_SUCCESS)
+        config = bubble.get_streamer_config(streamer_id)
+        return jsonify({"success": True, "data": config})
     else:
         return jsonify(local_settings.RESPONSE_FAILURE)
 
 
-@app.route("/streamer/<streamer_id>/delete", methods=['POST'])
+# @app.route("/streamer/<streamer_id>/delete", methods=['POST'])
+# @cross_origin(origin='localhost')
+# def remove_text_from_streamer(streamer_id):
+#     auth_token = request.headers.get("Authorization")
+#     if (not JWTworker.verify_token(auth_token)):
+#         abort(401)
+
+#     text_id = int(request.json["text_id"])
+
+#     if (text_id is None):
+#         return jsonify(local_settings.RESPONSE_FAILURE)
+
+#     ok = bubble.remove_text_choice(streamer_id, text_id)
+#     if (ok):
+#         return jsonify(local_settings.RESPONSE_SUCCESS)
+#     else:
+#         return jsonify(local_settings.RESPONSE_FAILURE)
+
+
+# @app.route("/streamer/<streamer_id>/registered")
+# @cross_origin(origin='localhost')
+# def is_registered(streamer_id):
+#     auth_token = request.headers.get("Authorization")
+#     if (not JWTworker.verify_token(auth_token)):
+#         abort(401)
+
+#     streamer = bubble.find_streamer_by_id(streamer_id)
+
+#     if (streamer is not None):
+#         return jsonify(local_settings.RESPONSE_SUCCESS)
+#     else:
+#         return jsonify(local_settings.RESPONSE_FAILURE)
+
+
+@app.route("/streamer/<streamer_id>/get_config", methods=['GET'])
 @cross_origin(origin='localhost')
-def remove_text_from_streamer(streamer_id):
-    auth_token = request.headers.get("Authorization")
-    if (not JWTworker.verify_token(auth_token)):
-        abort(401)
-
-    text_id = int(request.json["text_id"])
-
-    if (text_id is None):
-        return jsonify(local_settings.RESPONSE_FAILURE)
-
-    ok = bubble.remove_text_choice(streamer_id, text_id)
-    if (ok):
-        return jsonify(local_settings.RESPONSE_SUCCESS)
-    else:
-        return jsonify(local_settings.RESPONSE_FAILURE)
-
-
-@app.route("/streamer/<streamer_id>/registered")
-@cross_origin(origin='localhost')
-def is_registered(streamer_id):
-    auth_token = request.headers.get("Authorization")
-    if (not JWTworker.verify_token(auth_token)):
-        abort(401)
-
-    streamer = bubble.find_streamer_by_id(streamer_id)
-
-    if (streamer is not None):
-        return jsonify(local_settings.RESPONSE_SUCCESS)
-    else:
-        return jsonify(local_settings.RESPONSE_FAILURE)
-
-
-@app.route("/streamer/<streamer_id>/texts", methods=['GET'])
-@cross_origin(origin='localhost')
-def get_text_list(streamer_id):
+def get_config(streamer_id):
     auth_token = request.headers.get("Authorization")
     if (not JWTworker.verify_token(auth_token, roles=["broadcaster", "viewer"])):
         abort(401)
 
-    return jsonify({"buttons": bubble.get_streamer_texts(streamer_id)})
+    config = bubble.get_streamer_config(streamer_id)
+
+    if (config["registered"]):
+        token = bubble.get_streamer_token(streamer_id)
+        url = url_for("display_bubble", streamer_id=streamer_id) + \
+            "?token=" + token
+        config["link"] = url
+
+    return jsonify(config)
 
 
 def verify_transaction():
     return True
 
 
-@app.route("/streamer/<streamer_id>/register")
-@cross_origin(origin='localhost')
-def register(streamer_id):
-    auth_token = request.headers.get("Authorization")
-    if (not JWTworker.verify_token(auth_token)):
-        abort(401)
+# @app.route("/streamer/<streamer_id>/register")
+# @cross_origin(origin='localhost')
+# def register(streamer_id):
+#     auth_token = request.headers.get("Authorization")
+#     if (not JWTworker.verify_token(auth_token)):
+#         abort(401)
 
-    ok = bubble.add_streamer(streamer_id)
+#     ok = bubble.add_streamer(streamer_id)
 
-    if (ok):
-        return jsonify(local_settings.RESPONSE_SUCCESS)
-    else:
-        return jsonify(local_settings.RESPONSE_FAILURE)
+#     if (ok):
+#         return jsonify(local_settings.RESPONSE_SUCCESS)
+#     else:
+#         return jsonify(local_settings.RESPONSE_FAILURE)
 
 
 @app.route("/streamer/<streamer_id>/purchase", methods=['POST'])
@@ -160,30 +173,35 @@ def transaction_complete(streamer_id):
     if (not verify_transaction()):
         abort(403)
 
-    text_id = request.json['text_id']
+    if (not request.data):
+        return jsonify(local_settings.RESPONSE_FAILURE)
 
-    ok = bubble.set_curr_text(streamer_id, text_id)
+    data = request.json.get('data')
+
+    ok = bubble.update_streamer_curr_diplay(
+        streamer_id, data['text_id'], data['animation_id'], data['bubble_id'])
+
     if (ok):
-        text = bubble.get_curr_text(streamer_id)
-        socketio.emit("update", {'text': text}, room=streamer_id)
+        data["buyer_display_name"] = Streamer.get_display_name(data["buyer_id"])
+        socketio.emit("update", data, room=streamer_id)
         return jsonify(local_settings.RESPONSE_SUCCESS)
     else:
         return jsonify(local_settings.RESPONSE_FAILURE)
 
 
-@app.route("/streamer/<streamer_id>/url", methods=['GET'])
-@cross_origin(origin='localhost')
-def get_streamer_url(streamer_id):
-    auth_token = request.headers.get("Authorization")
-    if (not JWTworker.verify_token(auth_token, roles=["broadcaster"])):
-        abort(401)
+# @app.route("/streamer/<streamer_id>/url", methods=['GET'])
+# @cross_origin(origin='localhost')
+# def get_streamer_url(streamer_id):
+#     auth_token = request.headers.get("Authorization")
+#     if (not JWTworker.verify_token(auth_token, roles=["broadcaster"])):
+#         abort(401)
 
-    token = bubble.get_token(streamer_id)
-    if (token is None):
-        return jsonify(local_settings.RESPONSE_FAILURE)
+#     token = bubble.get_token(streamer_id)
+#     if (token is None):
+#         return jsonify(local_settings.RESPONSE_FAILURE)
 
-    url = url_for("display_bubble", streamer_id=streamer_id) + "?token=" + token
-    return jsonify({"success": "true", "url": url})
+#     url = url_for("display_bubble", streamer_id=streamer_id) + "?token=" + token
+#     return jsonify({"success": "true", "url": url})
 
 
 # Display part
@@ -205,15 +223,16 @@ def sync(data):
         return
 
     streamer_id = str(data['id'])
-    text = bubble.get_curr_text(streamer_id)
+    data = bubble.get_streamer_curr_display(streamer_id)
 
     print("Joined room" + streamer_id)
     join_room(str(streamer_id))
 
-    if (text is not None):
-        emit('update', {'text': text})
-    else:
-        emit('update', {'text': 'No text'})
+    # emit first update
+    emit('update', {'data': data})
+
+    # return config datar
+    return bubble.get_streamer_config(streamer_id)
 
 
 if __name__ == '__main__':
