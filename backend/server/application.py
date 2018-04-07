@@ -228,7 +228,7 @@ def sync(data):
 
     data["buyer_display_name"] = Streamer.get_display_name(data["buyer_id"])
 
-    print("Joined room" + streamer_id)
+    # join socketio room to recieve updates
     join_room(str(streamer_id))
 
     # emit first update
