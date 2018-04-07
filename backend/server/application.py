@@ -10,9 +10,9 @@ from assets.twitchapi import TwitchAPI
 from assets.jwtworker import JWTworker
 from assets.profanity_filter import ProfanityFilter
 
-app = Flask(__name__, template_folder='frontend')
-# app.config['SECRET_KEY']
-socketio = SocketIO(app)
+application = Flask(__name__, template_folder='frontend')
+# application.config['SECRET_KEY']
+socketio = SocketIO(application)
 logger = logging.getLogger('flask_app')
 bubble = Bubble(True)
 TwitchAPI.generate_oauth()
@@ -43,8 +43,8 @@ def log_setup(app, logger):
     log_f.setFormatter(formatter)
     log_s.setFormatter(formatter)
 
-    app.logger.addHandler(log_f)
-    app.logger.addHandler(log_s)
+    application.logger.addHandler(log_f)
+    application.logger.addHandler(log_s)
 
     # Set formatter for info
     log_f_app = logging.FileHandler(local_settings.FLASK_LOG_FILE)
@@ -63,12 +63,12 @@ def log_setup(app, logger):
 # API part
 
 
-@app.route("/")
+@application.route("/")
 def hello():
     return "Hello friend! Ask me something. I will never respond."
 
 
-@app.route("/streamer/<streamer_id>/save_config", methods=['POST'])
+@application.route("/streamer/<streamer_id>/save_config", methods=['POST'])
 @cross_origin(origin='localhost')
 def save_config(streamer_id):
     auth_token = request.headers.get("Authorization")
@@ -92,7 +92,7 @@ def save_config(streamer_id):
         return jsonify(local_settings.RESPONSE_FAILURE)
 
 
-# @app.route("/streamer/<streamer_id>/delete", methods=['POST'])
+# @application.route("/streamer/<streamer_id>/delete", methods=['POST'])
 # @cross_origin(origin='localhost')
 # def remove_text_from_streamer(streamer_id):
 #     auth_token = request.headers.get("Authorization")
@@ -111,7 +111,7 @@ def save_config(streamer_id):
 #         return jsonify(local_settings.RESPONSE_FAILURE)
 
 
-# @app.route("/streamer/<streamer_id>/registered")
+# @application.route("/streamer/<streamer_id>/registered")
 # @cross_origin(origin='localhost')
 # def is_registered(streamer_id):
 #     auth_token = request.headers.get("Authorization")
@@ -126,7 +126,7 @@ def save_config(streamer_id):
 #         return jsonify(local_settings.RESPONSE_FAILURE)
 
 
-@app.route("/streamer/<streamer_id>/get_config", methods=['GET'])
+@application.route("/streamer/<streamer_id>/get_config", methods=['GET'])
 @cross_origin(origin='localhost')
 def get_config(streamer_id):
     auth_token = request.headers.get("Authorization")
@@ -148,7 +148,7 @@ def verify_transaction():
     return True
 
 
-# @app.route("/streamer/<streamer_id>/register")
+# @application.route("/streamer/<streamer_id>/register")
 # @cross_origin(origin='localhost')
 # def register(streamer_id):
 #     auth_token = request.headers.get("Authorization")
@@ -163,7 +163,7 @@ def verify_transaction():
 #         return jsonify(local_settings.RESPONSE_FAILURE)
 
 
-@app.route("/streamer/<streamer_id>/purchase", methods=['POST'])
+@application.route("/streamer/<streamer_id>/purchase", methods=['POST'])
 @cross_origin(origin='localhost')
 def transaction_complete(streamer_id):
     auth_token = request.headers.get("Authorization")
@@ -179,7 +179,8 @@ def transaction_complete(streamer_id):
     data = request.json.get('data')
 
     ok = bubble.update_streamer_curr_diplay(
-        streamer_id, data['text_id'], data['animation_id'], data['bubble_id'])
+        streamer_id, data['text_id'], data['animation_id'],
+        data['bubble_id'], data['buyer_id'])
 
     if (ok):
         data["buyer_display_name"] = Streamer.get_display_name(data["buyer_id"])
@@ -189,7 +190,7 @@ def transaction_complete(streamer_id):
         return jsonify(local_settings.RESPONSE_FAILURE)
 
 
-# @app.route("/streamer/<streamer_id>/url", methods=['GET'])
+# @application.route("/streamer/<streamer_id>/url", methods=['GET'])
 # @cross_origin(origin='localhost')
 # def get_streamer_url(streamer_id):
 #     auth_token = request.headers.get("Authorization")
@@ -207,7 +208,7 @@ def transaction_complete(streamer_id):
 # Display part
 
 
-@app.route("/display/<streamer_id>")
+@application.route("/display/<streamer_id>")
 def display_bubble(streamer_id):
     token = request.args.get('token')
 
@@ -225,6 +226,8 @@ def sync(data):
     streamer_id = str(data['id'])
     data = bubble.get_streamer_curr_display(streamer_id)
 
+    data["buyer_display_name"] = Streamer.get_display_name(data["buyer_id"])
+
     print("Joined room" + streamer_id)
     join_room(str(streamer_id))
 
@@ -236,5 +239,5 @@ def sync(data):
 
 
 if __name__ == '__main__':
-    log_setup(app, logger)
-    socketio.run(app)
+    log_setup(application, logger)
+    socketio.run(application)

@@ -191,7 +191,7 @@ class Bubble():
 
     # Sets streamer's curr display values
     def update_streamer_curr_diplay(self, streamer_id, text_id, animation_id,
-                                    bubble_id):
+                                    bubble_id, buyer_id):
         streamer = self.find_streamer_by_id(streamer_id)
 
         if (streamer is None):
@@ -210,6 +210,11 @@ class Bubble():
             return False
 
         ok = streamer.set_curr_bubble_id(bubble_id)
+
+        if (not ok):
+            return False
+
+        ok = streamer.set_curr_buyer_id(buyer_id)
 
         if (not ok):
             return False

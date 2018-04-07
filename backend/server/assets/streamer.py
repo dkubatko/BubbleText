@@ -18,6 +18,8 @@ class Streamer:
     curr_animation_id = None
     # String
     curr_bubble_id = None
+    # String
+    curr_buyer_id = None
     # List of dict
     texts = None
     # List of dict
@@ -31,7 +33,7 @@ class Streamer:
     room_name = None
 
     def __init__(self, streamer_id, display_name="", curr_text_id="-1",
-                 curr_animation_id="-1", curr_bubble_id="-1", config={}, token=""):
+                 curr_animation_id="-1", curr_bubble_id="-1", curr_buyer_id="-1", config={}, token=""):
         self._log_setup()
 
         # initialize all fields
@@ -43,6 +45,7 @@ class Streamer:
         self.curr_text_id = curr_text_id
         self.curr_animation_id = curr_animation_id
         self.curr_bubble_id = curr_bubble_id
+        self.curr_buyer_id = curr_buyer_id
 
         if ("texts" in config.keys()):
             self.texts = config["texts"]
@@ -109,6 +112,11 @@ class Streamer:
                 return True
         return False
 
+    # Find bubble by id and set it to curr
+    def set_curr_buyer_id(self, curr_buyer_id):
+        self.curr_buyer_id = curr_buyer_id
+        return True
+
     # Update choices from config
     def update_config(self, config):
         self.texts = config["texts"]
@@ -120,7 +128,8 @@ class Streamer:
         return {
             "text_id": self.curr_text_id,
             "animation_id": self.curr_text_id,
-            "bubble_id": self.curr_bubble_id
+            "bubble_id": self.curr_bubble_id,
+            "buyer_id": self.curr_buyer_id
         }
 
     # # Adds multiple text choices for the streamer
@@ -192,6 +201,7 @@ class Streamer:
             "curr_text_id": self.curr_text_id,
             "curr_animation_id": self.curr_animation_id,
             "curr_bubble_id": self.curr_bubble_id,
+            "curr_buyer_id": self.curr_buyer_id,
             "texts": self.texts,
             "animations": self.animations,
             "bubbles": self.bubbles,
