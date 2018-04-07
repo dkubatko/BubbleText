@@ -13,8 +13,7 @@ class MongoWorker():
         self._log_setup()
 
         try:
-            client = MongoClient(local_settings.MONGO_HOST,
-                                 local_settings.MONGO_PORT)
+            client = MongoClient(local_settings.MONGO_URI)
             self.db = client.Bubble
 
             self.logger.info(local_settings.LOG_CONNECTION_SUCCESS.format(

@@ -40,7 +40,7 @@ class Streamer:
         self.streamer_id = streamer_id
 
         if (display_name == ""):
-            self.display_name = get_display_name(self.streamer_id)
+            self.display_name = Streamer.get_display_name(self.streamer_id)
 
         self.curr_text_id = curr_text_id
         self.curr_animation_id = curr_animation_id
