@@ -14,7 +14,9 @@ class JWTworker:
     def decode_payload(cls, token):
         try:
             payload = jwt.decode(token, cls.secret, algorithms=['HS256'])
-        except jwt.DecodeError as e:
+        except Exception as e:
+            logger = logging.getLogger("main.jwt")
+            logger.error("Error decoding token. error: {0}".format(str(e)))
             payload = {}
 
         return payload

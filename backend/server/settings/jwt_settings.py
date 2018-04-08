@@ -1,4 +1,4 @@
 # JWT_SECRET = "n6f5ppfzfc07zoo5np9eharzo84oyz"
-JWT_SECRET = "AmM/jVj8KeFBqWe9eQgpv6A7PfEGo0N9NSoWrcs6TM0="
+JWT_SECRET = "wQtYbc80v6NxZoKw5763mfy0CqgPtScc7CibvaTs2G0="
 EXP_TIME = 3600
 JWT_USER_ID = "43665292"
