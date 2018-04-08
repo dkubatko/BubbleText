@@ -13,7 +13,7 @@ DEFAULT_CONFIG = {
     "bubbles": [{"bubble_id": "0", "bubble": "default"}]
 }
 MAX_PROP_COUNT = {
-    "texts": 5,
+    "texts": 7,
     "animations": 3,
     "bubbles": 5
 }
