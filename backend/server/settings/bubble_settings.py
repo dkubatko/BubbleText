@@ -17,3 +17,4 @@ MAX_PROP_COUNT = {
     "animations": 3,
     "bubbles": 5
 }
+MAX_TEXT_LENGTH = 40

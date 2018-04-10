@@ -26,6 +26,8 @@ class Streamer:
     animations = None
     # List of dict
     bubbles = None
+    # String
+    price_sku = None
     # String token to access view page
     token = None
 
@@ -61,6 +63,11 @@ class Streamer:
             self.bubbles = config["bubbles"]
         else:
             self.bubbles = []
+
+        if ("price_sku" in config.keys()):
+            self.price_sku = config["price_sku"]
+        else:
+            self.price_sku = ""
 
         if (token == ""):
             self.token = Tokens.generate_token()
@@ -122,6 +129,7 @@ class Streamer:
         self.texts = config["texts"]
         self.animations = config["animations"]
         self.bubbles = config["bubbles"]
+        self.price_sku = config["price_sku"]
 
     # Get current display data
     def get_curr_display(self):
@@ -191,6 +199,7 @@ class Streamer:
             "texts": self.texts,
             "animations": self.animations,
             "bubbles": self.bubbles,
+            "price_sku": self.price_sku,
             "registered": True,
         }
 
@@ -205,5 +214,6 @@ class Streamer:
             "texts": self.texts,
             "animations": self.animations,
             "bubbles": self.bubbles,
+            "price_sku": self.price_sku,
             "token": self.token,
         }

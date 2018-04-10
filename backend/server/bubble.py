@@ -148,16 +148,21 @@ class Bubble():
         if (len(text_captions) > len(set(text_captions))):
             return False, "Texts are not unique"
 
-        # Filter bad words
+        # Filter bad words and length
         for text in texts:
             text["text"] = ProfanityFilter.filter(text["text"])
+
+            # Text too long
+            if (len(text["text"]) > local_settings.MAX_TEXT_LENGTH):
+                return False, "Text is too long"
 
         return True, None
 
     # Verifies whether config has necessary values
     @classmethod
     def verify_config(cls, config):
-        if any(key not in config.keys() for key in ["texts", "animations", "bubbles"]):
+        if any(key not in config.keys() for key in ["texts", "animations",
+                                                    "bubbles", "price_sku"]):
             return False, "Not all items are in the config"
 
         for key in ["texts", "animations", "bubbles"]:
@@ -171,6 +176,11 @@ class Bubble():
 
                 if (not ok):
                     return False, error
+
+        try:
+            config["price_sku"] = str(config["price_sku"])
+        except:
+            return False, "Price sku cannot be converted to string"
 
         return True, None
 
@@ -247,7 +257,6 @@ class Bubble():
                               LOG_STREAMER_NOT_FOUND.format(streamer_id))
 
         return streamer.get_curr_display()
-
 
     # returns token for a streamer
     def get_streamer_token(self, streamer_id):
