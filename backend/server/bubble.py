@@ -3,6 +3,7 @@ from database.mongo import MongoWorker
 import settings.global_settings as global_settings
 import settings.bubble_settings as local_settings
 from assets.profanity_filter import ProfanityFilter
+from assets.config import Config
 import logging
 
 
@@ -47,10 +48,8 @@ class Bubble():
                 curr_text_id=streamer.get("curr_text_id"),
                 curr_animation_id=streamer.get("curr_animation_id"),
                 curr_bubble_id=streamer.get("curr_bubble_id"),
-                config={
-                    "texts": streamer.get("texts"),
-                    "animations": streamer.get("animations"),
-                    "bubbles": streamer.get("bubbles")},
+                curr_buyer_id=streamer.get("curr_buyer_id"),
+                config=streamer.get("config"),
                 token=streamer.get("token")
             )
             self.streamers.append(curr)
@@ -101,13 +100,6 @@ class Bubble():
         self.db_insert_new_streamer(s)
         return True
 
-    # # Returns list of streamer's preset texts
-    # def get_streamer_texts(self, streamer_id):
-    #     for streamer in self.streamers:
-    #         if streamer.streamer_id == streamer_id:
-    #             return streamer.text_choices
-    #     return []
-
     # Find streamer object by id
     def find_streamer_by_id(self, streamer_id):
         for streamer in self.streamers:
@@ -115,80 +107,11 @@ class Bubble():
                 return streamer
         return None
 
-    # verifies one field and stringifies inputs
-    @classmethod
-    def verify_entry(cls, items, key):
-        if (len(items) > local_settings.MAX_PROP_COUNT[key]):
-            return False, "Too many choices for " + key
-
-        val = key[:-1]
-
-        for item in items:
-            if ("id" not in item.keys()):
-                return False, "Missing <id> for " + key
-            else:
-                item["id"] = str(item["id"])
-
-            if (val not in item.keys()):
-                return False, "Missing value for " + key
-            else:
-                item[val] = str(item[val])
-
-        item_ids = [item["id"] for item in items]
-        # check for uniquness
-        if (len(item_ids) > len(set(item_ids))):
-            return False, "Ids are not unique for " + key
-
-        return True, None
-
-    @classmethod
-    def verify_texts(cls, texts):
-        text_captions = [text["text"] for text in texts]
-        # check for uniquness
-        if (len(text_captions) > len(set(text_captions))):
-            return False, "Texts are not unique"
-
-        # Filter bad words and length
-        for text in texts:
-            text["text"] = ProfanityFilter.filter(text["text"])
-
-            # Text too long
-            if (len(text["text"]) > local_settings.MAX_TEXT_LENGTH):
-                return False, "Text is too long"
-
-        return True, None
-
-    # Verifies whether config has necessary values
-    @classmethod
-    def verify_config(cls, config):
-        if any(key not in config.keys() for key in ["texts", "animations",
-                                                    "bubbles", "price_sku"]):
-            return False, "Not all items are in the config"
-
-        for key in ["texts", "animations", "bubbles"]:
-            ok, error = Bubble.verify_entry(config[key], key)
-
-            if (not ok):
-                return False, error
-
-            if (key == "texts"):
-                ok, error = Bubble.verify_texts(config[key])
-
-                if (not ok):
-                    return False, error
-
-        try:
-            config["price_sku"] = str(config["price_sku"])
-        except:
-            return False, "Price sku cannot be converted to string"
-
-        return True, None
-
     # Updates streamer with new config or create a new streamer
     def update_streamer_config(self, streamer_id, config):
         streamer = self.find_streamer_by_id(streamer_id)
 
-        ok, error = Bubble.verify_config(config)
+        ok, error = Config.verify(config)
 
         if (not ok):
             self.logger.error(
@@ -213,7 +136,9 @@ class Bubble():
                               LOG_STREAMER_NOT_FOUND.format(streamer_id))
             return {"registered": False}
 
-        return streamer.get_config()
+        conf = streamer.get_config()
+        conf["registered"] = True
+        return conf
 
     # Sets streamer's curr display values
     def update_streamer_curr_diplay(self, streamer_id, text_id, animation_id,

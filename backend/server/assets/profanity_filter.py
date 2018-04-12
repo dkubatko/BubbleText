@@ -8,20 +8,17 @@ class ProfanityFilter:
     @classmethod
     def filter(cls, text):
         for bad_word in cls.bad_words_list:
-            if bad_word in text:
-                print(bad_word)
+            if bad_word in text.lower():
                 mask = cls.get_mask(len(bad_word))
-                text = text.replace(bad_word, mask)
+                text = text.lower().replace(bad_word, mask)
         return text
 
     @classmethod
     def get_mask(cls, length):
         # generates a mask of specified length
         result = ""
-        print(length)
         for i in range(length):
             result += cls.replacement_symbols[i % len(cls.replacement_symbols)]
-        print(result)
         return result
 
 

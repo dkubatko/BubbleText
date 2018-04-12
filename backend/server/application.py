@@ -14,8 +14,8 @@ application = Flask(__name__, template_folder='frontend', static_url_path="")
 # application.config['SECRET_KEY']
 socketio = SocketIO(application)
 logger = logging.getLogger('flask_app')
-bubble = Bubble(True)
 TwitchAPI.generate_oauth()
+bubble = Bubble(True)
 
 # PRETTIFY CONFIG PAGE -- DONE
 # GENERATE TOKEN FOR VIEW PAGE -- DONE
