@@ -140,60 +140,6 @@ class Streamer:
             "buyer_id": self.curr_buyer_id
         }
 
-    # # Adds multiple text choices for the streamer
-    # def add_text_choices(self, texts):
-    #     for text in texts:
-    #         self.add_text_choice(text)
-
-    # # Adds one text choice for the streamer
-    # def add_text_choice(self, text):
-    #     if (len(self.text_choices) >= local_settings.STREAMER_CHOICE_LIMIT):
-    #         self.logger.info(
-    #             local_settings.LOG_CHOICE_LIMIT_REACHED.format(self.streamer_id))
-    #         return False
-
-    #     choice = {
-    #         "text_id": len(self.text_choices),
-    #         "text": text
-    #     }
-    #     self.text_choices.append(choice)
-    #     return True
-
-    # # Removes one text choice by id for the streamer
-    # # returns False if not found True if found and updated
-    # def remove_text_choice(self, text_id):
-    #     found = False
-    #     to_delete = None
-    #     for choice in self.text_choices:
-    #         if (choice["text_id"] == text_id):
-    #             found = True
-    #             to_delete = choice
-    #             continue
-
-    #         # If found, decrease all the upcoming ids by 1
-    #         if (found):
-    #             choice["text_id"] -= 1
-
-    #     if (found):
-    #         self.text_choices.remove(to_delete)
-    #         return True
-    #     else:
-    #         return False
-
-    # # Updates current text displayed
-    # def set_curr_text(self, text_id):
-    #     choice = [choice for choice in self.text_choices
-    #               if str(choice["text_id"]) == str(text_id)]
-
-    #     if (len(choice) == 0):
-    #         return False
-
-    #     choice = choice[0]
-
-    #     self.curr_text_id = choice["text_id"]
-    #     self.curr_text = choice["text"]
-    #     return True
-
     def get_config(self):
         return {
             "texts": self.texts,

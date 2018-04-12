@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template, abort, url_for
+from flask import Flask, jsonify, request, render_template, abort, url_for, send_from_directory
 from flask_cors import CORS, cross_origin
 from flask_socketio import SocketIO, join_room, leave_room, send, emit
 from bubble import Bubble
@@ -10,7 +10,7 @@ from assets.twitchapi import TwitchAPI
 from assets.jwtworker import JWTworker
 from assets.profanity_filter import ProfanityFilter
 
-application = Flask(__name__, template_folder='frontend')
+application = Flask(__name__, template_folder='frontend', static_url_path="")
 # application.config['SECRET_KEY']
 socketio = SocketIO(application)
 logger = logging.getLogger('flask_app')
@@ -158,6 +158,11 @@ def display_bubble(streamer_id):
         abort(403)
 
     return render_template("bubble.html", streamer_id=streamer_id)
+
+
+@application.route("/static/<path:path>")
+def send_styles(path):
+    return send_from_directory('static', path)
 
 
 @socketio.on("sync")
