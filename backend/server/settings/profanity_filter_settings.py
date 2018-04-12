@@ -300,7 +300,6 @@ BAD_WORDS_LIST = [
 'throating',
 'tied up',
 'tight white',
-'tit',
 'tits',
 'titties',
 'titty',
