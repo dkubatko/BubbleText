@@ -86,6 +86,17 @@ def save_config(streamer_id):
 
     if (ok):
         config = bubble.get_streamer_config(streamer_id)
+
+        if (config["registered"]):
+	        token = bubble.get_streamer_token(streamer_id)
+
+	        if (token is not None):
+	            url = url_for("display_bubble", streamer_id=streamer_id) + \
+	                "?token=" + token
+	            config["link"] = url
+	        else:
+	            config["link"] = ""
+	            
         return jsonify({"success": True, "data": config})
     else:
         resp = local_settings.RESPONSE_FAILURE
