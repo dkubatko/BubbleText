@@ -84,6 +84,9 @@ class Config:
     # verifies one field and stringifies inputs
     @classmethod
     def verify_entry(cls, items, key):
+        if (len(items) == 0):
+            return False, "Zero items for " + key
+
         if (len(items) > local_settings.MAX_PROP_COUNT[key]):
             return False, "Too many choices for " + key
 

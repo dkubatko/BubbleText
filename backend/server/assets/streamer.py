@@ -3,6 +3,7 @@ import settings.streamer_settings as local_settings
 from assets.config import Config
 from assets.twitchapi import TwitchAPI
 from assets.tokens import Tokens
+from assets.display import Display
 import logging
 
 
@@ -29,8 +30,7 @@ class Streamer:
     # In memory vars
     room_name = None
 
-    def __init__(self, streamer_id, display_name="", curr_text_id="-1",
-                 curr_animation_id="-1", curr_bubble_id="-1", curr_buyer_id="-1",
+    def __init__(self, streamer_id, display_name="", display=None,
                  config=None, token=""):
         self._log_setup()
 
@@ -39,16 +39,18 @@ class Streamer:
 
         if (display_name == "" or display_name is None):
             self.display_name = Streamer.get_display_name(self.streamer_id)
-
-        self.curr_text_id = curr_text_id
-        self.curr_animation_id = curr_animation_id
-        self.curr_bubble_id = curr_bubble_id
-        self.curr_buyer_id = curr_buyer_id
+        else:
+            self.display_name = display_name
 
         if (config is None):
             self.config = Config.default()
         else:
             self.config = Config(config)
+
+        if (display is None):
+            self.display = Display.default(self.config)
+        else:
+            self.display = Display(display, self.config)
 
         if (token == ""):
             self.token = Tokens.generate_token()
@@ -76,34 +78,9 @@ class Streamer:
 
         return result["display_name"]
 
-    # Find text by id and set it to curr
-    def set_curr_text_id(self, text_id):
-        for text in self.config.texts:
-            if (text["id"] == text_id):
-                self.curr_text_id = text_id
-                return True
-        return False
-
-    # Find animation by id and set it to curr
-    def set_curr_animation_id(self, animation_id):
-        for animation in self.config.animations:
-            if (animation["id"] == animation_id):
-                self.curr_animation_id = animation_id
-                return True
-        return False
-
-    # Find bubble by id and set it to curr
-    def set_curr_bubble_id(self, bubble_id):
-        for bubble in self.config.bubbles:
-            if (bubble["id"] == bubble_id):
-                self.curr_bubble_id = bubble_id
-                return True
-        return False
-
-    # Find bubble by id and set it to curr
-    def set_curr_buyer_id(self, curr_buyer_id):
-        self.curr_buyer_id = curr_buyer_id
-        return True
+    # Update curr display from display
+    def update_display(self, display):
+        self.display.update(display)
 
     # Update choices from config
     def update_config(self, config):
@@ -111,12 +88,7 @@ class Streamer:
 
     # Get current display data
     def get_curr_display(self):
-        return {
-            "text_id": self.curr_text_id,
-            "animation_id": self.curr_text_id,
-            "bubble_id": self.curr_bubble_id,
-            "buyer_id": self.curr_buyer_id
-        }
+        return self.display.to_json()
 
     def get_config(self):
         return self.config.to_json()
@@ -125,10 +97,7 @@ class Streamer:
         return {
             "streamer_id": self.streamer_id,
             "display_name": self.display_name,
-            "curr_text_id": self.curr_text_id,
-            "curr_animation_id": self.curr_animation_id,
-            "curr_bubble_id": self.curr_bubble_id,
-            "curr_buyer_id": self.curr_buyer_id,
+            "display": self.display.to_json(),
             "config": self.config.to_json(),
             "token": self.token,
         }

@@ -62,6 +62,7 @@ def log_setup(app, logger):
 
 # API part
 
+
 @application.route("/")
 def hello():
     return "Hello friend! Ask me something. I will never respond."
@@ -88,15 +89,15 @@ def save_config(streamer_id):
         config = bubble.get_streamer_config(streamer_id)
 
         if (config["registered"]):
-	        token = bubble.get_streamer_token(streamer_id)
+            token = bubble.get_streamer_token(streamer_id)
 
-	        if (token is not None):
-	            url = url_for("display_bubble", streamer_id=streamer_id) + \
-	                "?token=" + token
-	            config["link"] = url
-	        else:
-	            config["link"] = ""
-	            
+            if (token is not None):
+                url = url_for("display_bubble", streamer_id=streamer_id) + \
+                    "?token=" + token
+                config["link"] = url
+            else:
+                config["link"] = ""
+
         return jsonify({"success": True, "data": config})
     else:
         resp = local_settings.RESPONSE_FAILURE
@@ -129,6 +130,7 @@ def get_config(streamer_id):
 def verify_transaction():
     return True
 
+
 @application.route("/api/streamer/<streamer_id>/purchase", methods=['POST'])
 @cross_origin(origin='localhost')
 def transaction_complete(streamer_id):
@@ -144,12 +146,11 @@ def transaction_complete(streamer_id):
 
     data = request.json.get('data')
 
-    ok, error = bubble.update_streamer_curr_diplay(
-        streamer_id, data['text_id'], data['animation_id'],
-        data['bubble_id'], data['buyer_id'])
+    ok, error = bubble.update_streamer_display(streamer_id, data)
 
     if (ok):
-        data["buyer_display_name"] = Streamer.get_display_name(data["buyer_id"])
+        data["buyer_display_name"] = Streamer.get_display_name(
+            data["buyer_id"])
         socketio.emit("update", data, room=streamer_id)
         return jsonify(local_settings.RESPONSE_SUCCESS)
     else:
@@ -182,7 +183,7 @@ def sync(data):
         return
 
     streamer_id = str(data['id'])
-    data = bubble.get_streamer_curr_display(streamer_id)
+    data = bubble.get_streamer_display(streamer_id)
 
     data["buyer_display_name"] = Streamer.get_display_name(data["buyer_id"])
 

@@ -342,4 +342,4 @@ BAD_WORDS_LIST = [
 'yiffy',
 'zoophilia'
 ]
-REPLACEMENT_SYMBOLS = ["!", "@", "#", "$", "%", "&", "*"]
+REPLACEMENT_SYMBOLS = ["@", "#", "!", "$", "%", "&", "*"]

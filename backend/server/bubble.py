@@ -4,6 +4,8 @@ import settings.global_settings as global_settings
 import settings.bubble_settings as local_settings
 from assets.profanity_filter import ProfanityFilter
 from assets.config import Config
+from assets.display import Display
+import pprint
 import logging
 
 
@@ -45,13 +47,14 @@ class Bubble():
             curr = Streamer(
                 streamer["streamer_id"],
                 display_name=streamer.get("display_name"),
-                curr_text_id=streamer.get("curr_text_id"),
-                curr_animation_id=streamer.get("curr_animation_id"),
-                curr_bubble_id=streamer.get("curr_bubble_id"),
-                curr_buyer_id=streamer.get("curr_buyer_id"),
+                display=streamer.get("display"),
                 config=streamer.get("config"),
                 token=streamer.get("token")
             )
+            # pprint.pprint(curr.to_json())
+            # # Replace with clean data
+            # coll.replace_one({"streamer_id": curr.streamer_id}, curr.to_json())
+            # print("Replaced " + curr.streamer_id)
             self.streamers.append(curr)
             count += 1
 
@@ -141,8 +144,7 @@ class Bubble():
         return conf
 
     # Sets streamer's curr display values
-    def update_streamer_curr_diplay(self, streamer_id, text_id, animation_id,
-                                    bubble_id, buyer_id):
+    def update_streamer_display(self, streamer_id, display):
         streamer = self.find_streamer_by_id(streamer_id)
 
         if (streamer is None):
@@ -150,31 +152,19 @@ class Bubble():
                               LOG_STREAMER_NOT_FOUND.format(streamer_id))
             return False, "Streamer with id " + streamer_id + " is not registered"
 
-        ok = streamer.set_curr_text_id(text_id)
+        ok, error = Display.verify(display, streamer.config)
 
         if (not ok):
-            return False, "Failure setting current text"
+            self.logger.error(
+                local_settings.LOG_DISPLAY_NOT_VALID.format(streamer_id, error))
+            return False, error
 
-        ok = streamer.set_curr_animation_id(animation_id)
-
-        if (not ok):
-            return False, "Failure setting current animation"
-
-        ok = streamer.set_curr_bubble_id(bubble_id)
-
-        if (not ok):
-            return False, "Failure setting current bubble"
-
-        ok = streamer.set_curr_buyer_id(buyer_id)
-
-        if (not ok):
-            return False, "Failure setting current buyer"
-
+        streamer.update_display(display)
         self.db_update_streamer(streamer)
         return True, None
 
     # Gets streamer's current display values
-    def get_streamer_curr_display(self, streamer_id):
+    def get_streamer_display(self, streamer_id):
         streamer = self.find_streamer_by_id(streamer_id)
 
         if (streamer is None):
