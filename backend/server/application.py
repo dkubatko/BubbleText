@@ -142,7 +142,7 @@ def transaction_complete(streamer_id):
         abort(403)
 
     if (not request.data):
-        return jsonify(local_settings.RESPONSE_FAILURE)
+        return jsonify(local_settings.RESPONSE_FAILURE)5
 
     data = request.json.get('data')
 
@@ -151,7 +151,7 @@ def transaction_complete(streamer_id):
     if (ok):
         data["buyer_display_name"] = Streamer.get_display_name(
             data["buyer_id"])
-        socketio.emit("update", data, room=streamer_id)
+        socketio.emit("update", {'data': data}, room=streamer_id)
         return jsonify(local_settings.RESPONSE_SUCCESS)
     else:
         resp = local_settings.RESPONSE_FAILURE
