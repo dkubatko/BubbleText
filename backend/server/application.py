@@ -142,7 +142,7 @@ def transaction_complete(streamer_id):
         abort(403)
 
     if (not request.data):
-        return jsonify(local_settings.RESPONSE_FAILURE)5
+        return jsonify(local_settings.RESPONSE_FAILURE)
 
     data = request.json.get('data')
 
@@ -169,7 +169,7 @@ def display_bubble(streamer_id):
     if (not bubble.verify_token(streamer_id, token)):
         abort(403)
 
-    return render_template("bubble.html", streamer_id=streamer_id)
+    return render_template("bubble.html", streamerId=streamer_id)
 
 
 @application.route("/static/<path:path>")
