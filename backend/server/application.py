@@ -196,8 +196,8 @@ def sync(data):
     # join socketio room to recieve updates
     join_room(str(streamer_id))
 
-    # emit first update
-    emit('update', {'data': data})
+    # # emit first update
+    # emit('update', {'data': data})
 
     # return config datar
     return bubble.get_streamer_config(streamer_id)
