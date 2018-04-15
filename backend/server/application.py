@@ -175,7 +175,7 @@ def display_bubble(streamer_id):
     if (not bubble.verify_token(streamer_id, token)):
         abort(403)
 
-    return render_template("bubble.html", streamerId=streamer_id)
+    return render_template("widget.html", streamerId=streamer_id)
 
 
 @application.route("/static/<path:path>")
