@@ -142,7 +142,7 @@ def verify_transaction():
 
 @application.route("/api/streamer/<streamer_id>/purchase", methods=['POST'])
 @cross_origin(origin='localhost')
-@jwt(roles = ["viewer"])
+@jwt(roles = ["viewer", "broadcaster"])
 def transaction_complete(streamer_id):
     if (not verify_transaction()):
         abort(403)
