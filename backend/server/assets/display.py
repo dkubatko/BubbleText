@@ -7,7 +7,7 @@ class Display:
     text_id = None
     animation_id = None
     bubble_id = None
-    buyer_id = None
+    buyer_display_name = None
     config = None
 
     def __init__(self, display, config):
@@ -24,13 +24,13 @@ class Display:
             self.text_id = self.config.texts[0]["id"]
             self.bubble_id = self.config.bubbles[0]["id"]
             self.animations_id = self.config.animations[0]["id"]
-            self.buyer_id = "0"
+            self.buyer_display_name = "Default"
             return
 
         self.text_id = display["text_id"]
         self.bubble_id = display["bubble_id"]
         self.animation_id = display["animation_id"]
-        self.buyer_id = display["buyer_id"]
+        self.buyer_display_name = display["buyer_display_name"]
 
     # no need for config since its wired to the one
     # in the streamer object
@@ -45,7 +45,7 @@ class Display:
         self.text_id = display["text_id"]
         self.bubble_id = display["bubble_id"]
         self.animation_id = display["animation_id"]
-        self.buyer_id = display["buyer_id"]
+        self.buyer_display_name = display["buyer_display_name"]
 
 
     def _log_setup(self):
@@ -57,7 +57,7 @@ class Display:
             return False, "Invalid type of display"
 
         if (any(key not in display.keys() for key in ["text_id", "bubble_id",
-                                                      "animation_id", "buyer_id"])):
+                                                      "animation_id", "buyer_display_name"])):
             return False, "Not all items are in the display"
 
         # check if items in config?
@@ -93,7 +93,7 @@ class Display:
             "text_id": config.texts[0]["id"],
             "bubble_id": config.bubbles[0]["id"],
             "animation_id": config.animations[0]["id"],
-            "buyer_id": "0"
+            "buyer_display_name": "0"
         }
         return Display(display, config)
 
@@ -103,5 +103,5 @@ class Display:
             "text_id": self.text_id,
             "bubble_id": self.bubble_id,
             "animation_id": self.animation_id,
-            "buyer_id": self.buyer_id
+            "buyer_display_name": self.buyer_display_name
         }

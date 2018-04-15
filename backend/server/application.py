@@ -136,7 +136,26 @@ def get_config(streamer_id):
     return jsonify(config)
 
 
-def verify_transaction():
+def verify_transaction(transaction_reciept):
+    # Remove this when transaction object exists
+    return True
+
+    if (transaction_reciept is None):
+        logger.error("Transaction reciept is not in request.")
+        return False
+
+    payload = JWTworker.decode_payload(transaction_reciept)
+
+    print(payload)
+
+    if (payload.get("initiator") is None):
+        logger.error("Transaction payload doesn't contain <initiator>")
+        return False
+
+    if (payload.get("initiator") != "CURRENT_USER"):
+        logger.error("Transaction's initiator is not CURRENT_USER")
+        return False
+
     return True
 
 
@@ -144,19 +163,20 @@ def verify_transaction():
 @cross_origin(origin='localhost')
 @jwt(roles = ["viewer", "broadcaster"])
 def transaction_complete(streamer_id):
-    if (not verify_transaction()):
-        abort(403)
-
     if (not request.data):
         return jsonify(local_settings.RESPONSE_FAILURE)
 
     data = request.json.get('data')
 
+    transaction_reciept = data.get("transaction_reciept")
+
+    if (not verify_transaction(transaction_reciept)):
+        abort(403)
+
     ok, error = bubble.update_streamer_display(streamer_id, data)
 
     if (ok):
-        data["buyer_display_name"] = Streamer.get_display_name(
-            data["buyer_id"])
+        data.pop("transaction_reciept", None)
         socketio.emit("update", {'data': data}, room=streamer_id)
         return jsonify(local_settings.RESPONSE_SUCCESS)
     else:
