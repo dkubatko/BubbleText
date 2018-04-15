@@ -209,9 +209,11 @@ def sync(data):
         return
 
     streamer_id = str(data['id'])
-    data = bubble.get_streamer_display(streamer_id)
 
-    data["buyer_display_name"] = Streamer.get_display_name(data["buyer_id"])
+    # For the first update
+    # data = bubble.get_streamer_display(streamer_id)
+
+    # data["buyer_display_name"] = Streamer.get_display_name(data["buyer_id"])
 
     # join socketio room to recieve updates
     join_room(str(streamer_id))
