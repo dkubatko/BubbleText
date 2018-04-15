@@ -81,24 +81,8 @@ class Bubble():
         coll.insert_one(s)
 
     # Create new streamer and insert to db
-    def add_streamer(self, streamer_id):
-        s = Streamer(streamer_id)
-        s.update_config(local_settings.DEFAULT_CONFIG)
-        s.set_curr_text_id(0)
-        s.set_curr_animation_id(0)
-        s.set_curr_bubble_id(0)
-
-        self.streamers.append(s)
-        self.db_insert_new_streamer(s)
-        return True
-
-    # Create new streamer and insert to db
     def add_streamer_with_config(self, streamer_id, config):
         s = Streamer(streamer_id, config=config)
-        s.set_curr_text_id(0)
-        s.set_curr_animation_id(0)
-        s.set_curr_bubble_id(0)
-
         self.streamers.append(s)
         self.db_insert_new_streamer(s)
         return True
