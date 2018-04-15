@@ -85,7 +85,7 @@ class Bubble():
         s = Streamer(streamer_id, config=config)
         self.streamers.append(s)
         self.db_insert_new_streamer(s)
-        return True
+        return True, None
 
     # Find streamer object by id
     def find_streamer_by_id(self, streamer_id):
@@ -107,8 +107,8 @@ class Bubble():
 
         # if streamer doesn't exist, create
         if (streamer is None):
-            ok = self.add_streamer_with_config(streamer_id, config)
-            return ok
+            ok, error = self.add_streamer_with_config(streamer_id, config)
+            return ok, error
 
         streamer.update_config(config)
         self.db_update_streamer(streamer)
