@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request, render_template, abort, url_for, send
 from flask_cors import CORS, cross_origin
 from flask_socketio import SocketIO, join_room, leave_room, send, emit
 from bubble import Bubble
+from functools import wraps
 import settings.flask_settings as local_settings
 import settings.global_settings as global_settings
 import logging
@@ -60,6 +61,20 @@ def log_setup(app, logger):
 
     logger.info("Successfully set up logging")
 
+# Decorator for checking JWT tokens in request
+def jwt(roles = ["broadcaster", "viewer"]):
+    def jwt_decorator(func):
+        @wraps(func)
+        def decorated_route(*args, **kwargs):
+            auth_token = request.headers.get("Authorization")
+            if (not JWTworker.verify_token(auth_token, roles = roles)):
+                abort(401)
+            return func(*args, **kwargs)
+        return decorated_route
+    return jwt_decorator
+
+
+
 # API part
 
 
@@ -70,11 +85,8 @@ def hello():
 
 @application.route("/api/streamer/<streamer_id>/save_config", methods=['POST'])
 @cross_origin(origin='localhost')
+@jwt(roles = ["broadcaster"])
 def save_config(streamer_id):
-    auth_token = request.headers.get("Authorization")
-    if (not JWTworker.verify_token(auth_token)):
-        abort(401)
-
     if (not request.data):
         return jsonify(local_settings.RESPONSE_FAILURE)
 
@@ -107,11 +119,8 @@ def save_config(streamer_id):
 
 @application.route("/api/streamer/<streamer_id>/get_config", methods=['GET'])
 @cross_origin(origin='localhost')
+@jwt(roles = ["broadcaster", "viewer"])
 def get_config(streamer_id):
-    auth_token = request.headers.get("Authorization")
-    if (not JWTworker.verify_token(auth_token, roles=["broadcaster", "viewer"])):
-        abort(401)
-
     config = bubble.get_streamer_config(streamer_id)
 
     if (config["registered"]):
@@ -133,11 +142,8 @@ def verify_transaction():
 
 @application.route("/api/streamer/<streamer_id>/purchase", methods=['POST'])
 @cross_origin(origin='localhost')
+@jwt(roles = ["viewer"])
 def transaction_complete(streamer_id):
-    auth_token = request.headers.get("Authorization")
-    if (not JWTworker.verify_token(auth_token, roles=["viewer"])):
-        abort(401)
-
     if (not verify_transaction()):
         abort(403)
 
@@ -156,7 +162,7 @@ def transaction_complete(streamer_id):
     else:
         resp = local_settings.RESPONSE_FAILURE
         resp["error"] = error
-        return jsonify(local_settings.RESPONSE_FAILURE)
+        return jsonify(resp)
 
 
 # Display part

@@ -43,7 +43,7 @@ class JWTworker:
         return cls.encode_payload(payload)
 
     @classmethod
-    def verify_token(cls, incoming_token, roles=["broadcaster"]):
+    def verify_token(cls, incoming_token, roles=["broadcaster", "viewer"]):
         if not isinstance(incoming_token, str):
             return False
 

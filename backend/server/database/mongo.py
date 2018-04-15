@@ -45,3 +45,6 @@ class MongoWorker():
     # Get the iteratable collection of streamers
     def get_streamers_collection(self):
         return self.db.streamers
+
+    def get_stats_collection(self):
+        return self.db.stats
