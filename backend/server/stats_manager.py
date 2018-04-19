@@ -48,7 +48,7 @@ class StatsManager():
             self.streamer_id = streamer_id
             self.event = event
             self.data = data
-            self.timestamp = time.time()
+            self.timestamp = int(time.time())
 
         def to_json(self):
             return {
