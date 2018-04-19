@@ -1,1 +1,3 @@
 DEBUG = True
+
+RECORD_STATS = True

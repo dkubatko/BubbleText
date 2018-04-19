@@ -3,3 +3,4 @@ TWITCH_API_CLIENT_SECRET = "n6f5ppfzfc07zoo5np9eharzo84oyz"
 
 TWITCH_OAUTH_LINK = "https://id.twitch.tv/oauth2/token"
 TWITCH_CHANNEL_INFO_LINK = "https://api.twitch.tv/kraken/channels/{0}"
+TWITCH_STREAMS_INFO_LINK = "https://api.twitch.tv/helix/streams?user_id={0}"

@@ -9,6 +9,7 @@ import logging
 from assets.streamer import Streamer
 from assets.twitchapi import TwitchAPI
 from assets.jwtworker import JWTworker
+from stats_manager import StatsManager
 from assets.profanity_filter import ProfanityFilter
 
 application = Flask(__name__, template_folder='frontend', static_url_path="")
@@ -17,6 +18,7 @@ socketio = SocketIO(application)
 logger = logging.getLogger('flask_app')
 TwitchAPI.generate_oauth()
 bubble = Bubble(True)
+stats = StatsManager()
 
 # PRETTIFY CONFIG PAGE -- DONE
 # GENERATE TOKEN FOR VIEW PAGE -- DONE
@@ -86,6 +88,7 @@ def hello():
 @application.route("/api/streamer/<streamer_id>/save_config", methods=['POST'])
 @cross_origin(origin='localhost')
 @jwt(roles = ["broadcaster"])
+@stats.record_event("save config")
 def save_config(streamer_id):
     if (not request.data):
         return jsonify(local_settings.RESPONSE_FAILURE)
@@ -123,6 +126,7 @@ def save_config(streamer_id):
 def get_config(streamer_id):
     config = bubble.get_streamer_config(streamer_id)
 
+    live = False
     if (config["registered"]):
         token = bubble.get_streamer_token(streamer_id)
 
@@ -133,16 +137,24 @@ def get_config(streamer_id):
         else:
             config["link"] = ""
 
-    return jsonify(config)
+        # Check whether streamer is live
+        streamer_live_info = TwitchAPI.get_streamer_live_info(streamer_id)
+
+        if (streamer_live_info is not None and len(streamer_live_info) != 0):
+            live = True
+
+    resp = {"success": True, "data": config, "live": live}
+
+    return jsonify(resp)
 
 
 def verify_transaction(transaction_reciept):
-    # Remove this when transaction object exists
-    return True
-
     if (transaction_reciept is None):
         logger.error("Transaction reciept is not in request.")
         return False
+
+    # Remove this when transaction object exists
+    return True
 
     payload = JWTworker.decode_payload(transaction_reciept)
 
@@ -162,6 +174,7 @@ def verify_transaction(transaction_reciept):
 @application.route("/api/streamer/<streamer_id>/purchase", methods=['POST'])
 @cross_origin(origin='localhost')
 @jwt(roles = ["viewer", "broadcaster"])
+@stats.record_event("purchase")
 def transaction_complete(streamer_id):
     if (not request.data):
         return jsonify(local_settings.RESPONSE_FAILURE)
@@ -177,6 +190,27 @@ def transaction_complete(streamer_id):
 
     if (ok):
         data.pop("transaction_reciept", None)
+        socketio.emit("update", {'data': data}, room=streamer_id)
+        return jsonify(local_settings.RESPONSE_SUCCESS)
+    else:
+        resp = local_settings.RESPONSE_FAILURE
+        resp["error"] = error
+        return jsonify(resp)
+
+
+@application.route("/api/streamer/<streamer_id>/purchase/free", methods=['POST'])
+@cross_origin(origin='localhost')
+@jwt(roles = ["viewer", "broadcaster"])
+@stats.record_event("purchase free")
+def free_transaction_complete(streamer_id):
+    if (not request.data):
+        return jsonify(local_settings.RESPONSE_FAILURE)
+
+    data = request.json.get('data')
+
+    ok, error = bubble.update_streamer_display(streamer_id, data)
+
+    if (ok):
         socketio.emit("update", {'data': data}, room=streamer_id)
         return jsonify(local_settings.RESPONSE_SUCCESS)
     else:

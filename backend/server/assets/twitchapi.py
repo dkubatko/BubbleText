@@ -47,3 +47,26 @@ class TwitchAPI:
             return None
 
         return result.json()
+
+    @classmethod
+    def get_streamer_live_info(cls, streamer_id):
+        if (cls.oauth_token is None):
+            l = logging.getLogger("main.twitchapi")
+            l.error("OAUTH token not specified")
+            return None
+
+        headers = {
+            'Client-ID': cls.client_id,
+            'Accept': 'application/vnd.twitchtv.v5+json',
+            'Authorization': 'OAuth ' + cls.oauth_token,
+        }
+
+        result = requests.get(
+            local_settings.TWITCH_STREAMS_INFO_LINK.format(streamer_id), headers=headers)
+
+
+
+        if (result.status_code != 200):
+            return None
+
+        return result.json()["data"]
