@@ -79,10 +79,20 @@ def jwt(roles = ["broadcaster", "viewer"]):
 
 # API part
 
-
 @application.route("/")
 def hello():
-    return "Hello friend! Ask me something. I will never respond."
+    return "Nope."
+
+@application.route("/tutorial")
+def tutorial():
+    streamer_id = request.args.get("streamer_id")
+
+    if (streamer_id is None):
+        streamer_name = "streamer"
+    else:
+        streamer_name = Streamer.get_display_name(streamer_id)
+
+    return render_template("index.html", streamer=streamer_name)
 
 
 @application.route("/api/streamer/<streamer_id>/save_config", methods=['POST'])
