@@ -208,6 +208,14 @@ def free_transaction_complete(streamer_id):
 
     data = request.json.get('data')
 
+    if (data.get("buyer_id") is None):
+        resp = local_settings.RESPONSE_FAILURE
+        resp["error"] = "Buyer id is not in data"
+        return jsonify(resp)
+
+    data["buyer_display_name"] = Streamer.get_display_name(data["buyer_id"])
+    data.pop("buyer_id", None)
+
     ok, error = bubble.update_streamer_display(streamer_id, data)
 
     if (ok):

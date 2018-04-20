@@ -5,6 +5,7 @@ import settings.bubble_settings as local_settings
 from assets.profanity_filter import ProfanityFilter
 from assets.config import Config
 from assets.display import Display
+from assets.twitchapi import TwitchAPI
 import pprint
 import logging
 
@@ -106,8 +107,14 @@ class Bubble():
             return False, error
 
         # if streamer doesn't exist, create
+        # This is where streamers are created
         if (streamer is None):
             ok, error = self.add_streamer_with_config(streamer_id, config)
+
+            # If successfully created streamer, set config done
+            if (ok):
+                ok = TwitchAPI.set_config_done(streamer_id)
+
             return ok, error
 
         streamer.update_config(config)

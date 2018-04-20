@@ -2,7 +2,7 @@ import logging
 import requests
 import settings.twitchapi_settings as local_settings
 import settings.global_settings as global_settings
-
+from assets.jwtworker import JWTworker
 
 class TwitchAPI:
     oauth_token = None
@@ -70,3 +70,28 @@ class TwitchAPI:
             return None
 
         return result.json()["data"]
+
+    @classmethod
+    def set_config_done(cls, streamer_id):
+        if (cls.oauth_token is None):
+            l = logging.getLogger("main.twitchapi")
+            l.error("OAUTH token not specified")
+            return None
+
+        jwt_sign = JWTworker.create_token()
+
+        payload = {"required_configuration": "done"}
+
+        headers = {
+            'Client-ID': local_settings.TWITCH_EXTENSION_CLIENT_ID,
+            "Content-Type": "application/json",
+            'Authorization': 'Bearer ' + jwt_sign,
+        }
+
+        result = requests.put(local_settings.TWITCH_REQUIRED_CONFIG_LINK.format(streamer_id),
+                              headers=headers)
+
+        if (result.status_code != 204):
+            return False
+
+        return True

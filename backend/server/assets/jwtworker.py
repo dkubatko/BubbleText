@@ -24,7 +24,7 @@ class JWTworker:
     @classmethod
     def encode_payload(cls, payload):
         try:
-            result = jwt.encode(payload. cls.secret, algorithm='HS256')
+            result = jwt.encode(payload, cls.secret, algorithm='HS256')
         except Exception as e:
             logger = logging.getLogger("main.jwt")
             logger.error("Error encoding payload: {0}".format(str(e)))
@@ -33,14 +33,14 @@ class JWTworker:
         return result
 
     @classmethod
-    def create_token(cls, incoming_token):
-        exptime = time.time() + local_settings.EXP_TIME
+    def create_token(cls):
+        exptime = int(time.time()) + local_settings.EXP_TIME
         payload = {
             "exp": exptime,
             "user_id": local_settings.JWT_USER_ID,
             "role": "external"
         }
-        return cls.encode_payload(payload)
+        return cls.encode_payload(payload).decode("utf-8")
 
     @classmethod
     def verify_token(cls, incoming_token, roles=["broadcaster", "viewer"]):
@@ -59,3 +59,5 @@ class JWTworker:
             return True
         else:
             return False
+
+
