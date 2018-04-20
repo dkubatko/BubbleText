@@ -3,6 +3,7 @@ import requests
 import settings.twitchapi_settings as local_settings
 import settings.global_settings as global_settings
 from assets.jwtworker import JWTworker
+import json
 
 class TwitchAPI:
     oauth_token = None
@@ -80,7 +81,7 @@ class TwitchAPI:
 
         jwt_sign = JWTworker.create_token()
 
-        payload = {"required_configuration": "done"}
+        payload = json.dumps({"required_configuration": "done"})
 
         headers = {
             'Client-ID': local_settings.TWITCH_EXTENSION_CLIENT_ID,
@@ -90,6 +91,7 @@ class TwitchAPI:
 
         result = requests.put(local_settings.TWITCH_REQUIRED_CONFIG_LINK.format(streamer_id),
                               headers=headers, data=payload)
+        print(result)
 
         if (result.status_code != 204):
             return False
