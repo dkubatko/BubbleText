@@ -114,11 +114,14 @@ class Bubble():
             # If successfully created streamer, set config done
             if (ok):
                 ok = TwitchAPI.set_config_done(streamer_id)
+                error = "Problems communicating with Twitch API"
 
             return ok, error
 
         streamer.update_config(config)
         self.db_update_streamer(streamer)
+        # Save done just in case
+        TwitchAPI.set_config_done(streamer_id)
         return True, None
 
     # Get streamer's config

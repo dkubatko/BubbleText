@@ -91,7 +91,6 @@ class TwitchAPI:
 
         result = requests.put(local_settings.TWITCH_REQUIRED_CONFIG_LINK.format(streamer_id),
                               headers=headers, data=payload)
-        print(result)
 
         if (result.status_code != 204):
             return False
