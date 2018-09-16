@@ -68,7 +68,7 @@ def jwt(roles = ["broadcaster", "viewer"]):
     def jwt_decorator(func):
         @wraps(func)
         def decorated_route(*args, **kwargs):
-            auth_token = request.headers.get("Authorization")
+            auth_token = str(request.headers.get("Authorization"))
             if (not JWTworker.verify_token(auth_token, roles = roles)):
                 abort(401)
             return func(*args, **kwargs)
@@ -97,7 +97,7 @@ def tutorial():
 
 @application.route("/api/streamer/<streamer_id>/save_config", methods=['POST'])
 @cross_origin(origin='localhost')
-@jwt(roles = ["broadcaster"])
+@jwt(roles = ["broadcaster", "moderator"])
 @stats.record_event("save config")
 def save_config(streamer_id):
     if (not request.data):
@@ -132,7 +132,7 @@ def save_config(streamer_id):
 
 @application.route("/api/streamer/<streamer_id>/get_config", methods=['GET'])
 @cross_origin(origin='localhost')
-@jwt(roles = ["broadcaster", "viewer"])
+@jwt(roles = ["broadcaster", "viewer", "moderator"])
 def get_config(streamer_id):
     config = bubble.get_streamer_config(streamer_id)
 
@@ -183,7 +183,7 @@ def verify_transaction(transaction_reciept):
 
 @application.route("/api/streamer/<streamer_id>/purchase", methods=['POST'])
 @cross_origin(origin='localhost')
-@jwt(roles = ["viewer", "broadcaster"])
+@jwt(roles = ["viewer", "broadcaster", "moderator"])
 @stats.record_event("purchase")
 def transaction_complete(streamer_id):
     if (not request.data):
@@ -210,7 +210,7 @@ def transaction_complete(streamer_id):
 
 @application.route("/api/streamer/<streamer_id>/purchase/free", methods=['POST'])
 @cross_origin(origin='localhost')
-@jwt(roles = ["viewer", "broadcaster"])
+@jwt(roles = ["viewer", "broadcaster", "moderator"])
 @stats.record_event("purchase free")
 def free_transaction_complete(streamer_id):
     if (not request.data):

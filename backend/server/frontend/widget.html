@@ -5,15 +5,70 @@
 </head>
 
 <body class="no-margin">
-
-  <div id="extension-root" class="no-margin">
-
-  </div>
+  <div id="extension-root" class="no-margin"></div>
 
   <script>
-    var streamerId = {{ streamerId }};
+    // var streamerId = {{ streamerId }};
     // var streamerId = "43665292";
+    window.streamerId = {{ streamerId }};
   </script>
 
-  <script src="/static/widget.js"></script>
+  <!-- CORE LIBS -->
+
+  <!-- React -->
+  <!-- <script src="https://unpkg.com/react@16.3.2/umd/react.production.min.js"></script> -->
+  <script src="libs/react.production.min.js"></script>
+
+  <!-- ReactDOM -->
+  <!-- <script src="https://unpkg.com/react-dom@16.3.2/umd/react-dom.production.min.js"></script> -->
+  <script src="libs/react-dom.production.min.js"></script>
+
+  <!-- PropTypes -->
+  <!-- <script src="https://unpkg.com/prop-types@15.6.1/prop-types.min.js"></script> -->
+  <script src="libs/prop-types.min.js"></script>
+
+  <!-- Lottie Web OLD(Bodymovin) -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/4.13.0/bodymovin.min.js"></script> -->
+  <!-- <script src="libs/bodymovin.min.js"></script> -->
+
+  <!-- Lottie Web(no CDNs) -->
+  <!-- <script src="https://github.com/airbnb/lottie-web/blob/master/build/player/lottie.min.js"></script> -->
+  <!-- <script src="https://raw.githubusercontent.com/airbnb/lottie-web/master/build/player/lottie.min.js"></script> -->
+  <script src="libs/lottie.min.js"></script>
+
+  <!-- Styled Components -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/styled-components/3.2.6/styled-components.min.js"></script> -->
+  <script src="libs/styled-components.min.js"></script>
+
+  <!-- MobX -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/mobx/3.6.1/mobx.umd.min.js"></script> -->
+  <script src="libs/mobx.umd.min.js"></script>
+
+  <!-- mobx-react -->
+  <!-- <script src="https://unpkg.com/mobx-react@4.4.2/index.min.js"></script> -->
+  <script src="libs/mobx-react.min.js"></script>
+
+  <!-- Axios -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script> -->
+  <script src="libs/axios.min.js"></script>
+
+
+
+
+
+  <!-- ADDITIONAL LIBS -->
+
+  <!-- socket.io-client -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script> -->
+  <script src="libs/socket.io.js"></script>
+
+  <!-- Font Awesome -->
+  <!-- <script src="https://use.fontawesome.com/releases/v5.0.10/js/all.js"></script> -->
+  <script src="libs/fontawesome.min.js"></script>
+
+  <!-- Soundmanager2 -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/soundmanager2@2.97.20170602/script/soundmanager2.min.js"></script> -->
+  <script src="libs/soundmanager2.min.js"></script>
+
+  <script src="widget.js"></script>
 </body>

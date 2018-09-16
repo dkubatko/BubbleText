@@ -65,12 +65,10 @@ class TwitchAPI:
         result = requests.get(
             local_settings.TWITCH_STREAMS_INFO_LINK.format(streamer_id), headers=headers)
 
-
-
         if (result.status_code != 200):
             return None
 
-        return result.json()["data"]
+        return result.json()["streams"]
 
     @classmethod
     def set_config_done(cls, streamer_id):
