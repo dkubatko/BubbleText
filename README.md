@@ -9,7 +9,7 @@ Well, nothing would explain that better than the extension itself. However, due 
 But don't worry, we've got something to show you!
 <br>
 First, here is a [link](https://docs.google.com/presentation/d/1VBK1vg7c7W_qkOp95eZPibhwEC2Tqm8TAlZolsdLeQ8/edit?usp=sharing) to our awesome presentation that neatly showcases all the functionality and design patterns of the extension.
-Secondly, you can run the app locally using instruction from [frontend](#frontend) and [backend](#sections).
+Secondly, you can run the app locally using instruction from [frontend](#frontend) and [backend](#backend) sections.
 
 ## Why not other tools?
 One might ask: there are simillar tools like *streamlabs*, how is **BubbleText** superior to those? Here is the answer:
