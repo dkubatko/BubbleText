@@ -9,7 +9,7 @@ Well, nothing would explain that better than the extension itself. However, due 
 But don't worry, we've got something to show you!
 <br>
 First, here is a [link](https://docs.google.com/presentation/d/1VBK1vg7c7W_qkOp95eZPibhwEC2Tqm8TAlZolsdLeQ8/edit?usp=sharing) to our awesome presentation that neatly showcases all the functionality and design patterns of the extension.
-Secondly, you can run the app locally using instruction from [frontend](#frontend) and [backend](#backend) sections.
+Secondly, you can run the app locally using instruction from [frontend](#frontend-part) and [backend](#backend-part) sections.
 
 ## Why not other tools?
 One might ask: there are simillar tools like *streamlabs*, how is **BubbleText** superior to those? Here is the answer:
@@ -22,13 +22,13 @@ One might ask: there are simillar tools like *streamlabs*, how is **BubbleText**
 ## Usage
 This repo contains both front- and back-end parts of the extension.
 <br>
-### [Frontend part](#frontend)
+### Frontend part
 BubbleText extension frontend was solely developed by @Ciberusps.<br>
 Thanks to him as our extension has an outstanding appearance and truly intuitive UX.
 <br>
 It was developed with [React](https://reactjs.org/) with Webpack and Babel. <br>
 All relevant files/instructions can be found under `frontend_extension` directory.
-### [Backend part](#backend)
+### Backend part
 All the server-side code is located under `backend/server` directory. You can also find `backend/serverenv` directory helpful as it contains python virtualenv to run the server locally.
 <br>
 Original app was deployed on [AWS EB](https://aws.amazon.com/elasticbeanstalk/).
