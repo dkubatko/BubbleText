@@ -60,7 +60,7 @@ class Display:
                                                       "animation_id", "buyer_display_name"])):
             return False, "Not all items are in the display"
 
-        # check if items in config?
+        # check if items in config
         found = False
         for text in config.texts:
             if (text["id"] == display["text_id"]):

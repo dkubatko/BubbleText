@@ -13,21 +13,11 @@ from stats_manager import StatsManager
 from assets.profanity_filter import ProfanityFilter
 
 application = Flask(__name__, template_folder='frontend', static_url_path="")
-# application.config['SECRET_KEY']
 socketio = SocketIO(application)
 logger = logging.getLogger('flask_app')
 TwitchAPI.generate_oauth()
-bubble = Bubble(True)
+bubble = Bubble(read_data=True)
 stats = StatsManager()
-
-# PRETTIFY CONFIG PAGE -- DONE
-# GENERATE TOKEN FOR VIEW PAGE -- DONE
-# LIMIT NUMBER OF TEXT CHOICES -- DONE
-# ? TEXT CHOICE
-# JWT TOKEN -- DONE
-# ANIMATION FOR BUBBLE
-# REVEAL LINK ON CONFIG -- DONE
-
 
 def log_setup(app, logger):
     log_f = logging.FileHandler(local_settings.FLASK_LOG_FILE)

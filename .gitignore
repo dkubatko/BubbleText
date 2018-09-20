@@ -100,3 +100,6 @@ serverenv/
 
 # mypy
 .mypy_cache/
+
+# vscode
+*.vscode

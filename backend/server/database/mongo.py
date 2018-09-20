@@ -42,9 +42,10 @@ class MongoWorker():
 
         self.logger.info("Successfully set up logging")
 
-    # Get the iteratable collection of streamers
+    # Get an iteratable collection of streamers
     def get_streamers_collection(self):
         return self.db.streamers
 
+    # Get an iteratable collecation of stats
     def get_stats_collection(self):
         return self.db.stats
