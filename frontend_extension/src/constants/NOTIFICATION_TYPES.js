@@ -1,0 +1,7 @@
+const NOTIFICATION_TYPES = {
+  WARNING: "WARNING",
+  ERROR: "ERROR",
+  INFO: "INFO"
+};
+
+export default NOTIFICATION_TYPES;

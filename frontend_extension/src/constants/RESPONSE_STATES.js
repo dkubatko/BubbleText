@@ -1,0 +1,8 @@
+const RESPONSE_STATES = {
+  UNDEFINED: "UNDEFINED",
+  PENDING: "PENDING",
+  DONE: "DONE",
+  ERROR: "ERROR"
+};
+
+export default RESPONSE_STATES;

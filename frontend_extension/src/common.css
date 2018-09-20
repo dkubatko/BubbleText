@@ -1,0 +1,112 @@
+@font-face {
+  font-family: "Radiance";
+  src: local("Radiance"), local("Radiance"),
+    url("../fonts/Radiance.ttf") format("truetype"),
+    url("../fonts/Radiance.svg#Radiance") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Radiance";
+  src: local("Radiance"), local("Radiance-Semibold"),
+    url("../fonts/Radiance-Semibold.ttf") format("truetype"),
+    url("../fonts/Radiance-Semibold.svg#Radiance-Semibold") format("svg");
+  font-weight: bolder;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Radiance";
+  src: local("Radiance"), local("Radiance-Bold"),
+    url("../fonts/Radiance-Bold.ttf") format("truetype"),
+    url("../fonts/Radiance-Bold.svg#Radiance-Bold") format("svg");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Inception";
+  src: url("../fonts/Inception.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "CircularPro";
+  src: url("../fonts/circular-pro.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "CircularPro";
+  src: url("../fonts/circular-pro-bold.woff") format("woff");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Poppins-Regular";
+  src: local("Poppins-Regular"), local("Poppins-Regular"),
+    url("../fonts/Poppins/Poppins-Regular.ttf") format("truetype");
+  /* url("../fonts/Radiance.svg#Radiance") format("svg"); */
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* @font-face {
+  font-family: "Burbank";
+  src: local("Burbank"), local("Burbank"),
+    url("../fonts/BurbankBigCondensed-Bold.otf") format("opentype");
+  font-weight: bold;
+  font-style: normal;
+} */
+
+/* @font-face {
+  font-family: "Poppins";
+  src: local("Poppins"), local("Radiance-Semibold"),
+    url("../fonts/Poppins/Radiance-Semibold.ttf") format("truetype"),
+    url("../fonts/Radiance-Semibold.svg#Radiance-Semibold") format("svg");
+  font-weight: bolder;
+  font-style: normal;
+} */
+
+/* *:focus {
+  outline: none;
+}
+
+*::selection {
+  background-color: #d91b5b;
+} */
+
+/* * { */
+/* font-family: Poppins, Arial, sans-serif; */
+/* font-family: Burbank, Arial, sans-serif;
+  font-weight: bold;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+} */
+
+/* input {
+  border: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+} */
+
+body {
+  /* font-family: Poppins, Arial, sans-serif; */
+  /* background-color: #00ff00; */
+  font-size: 12px;
+  font-weight: normal;
+  color: black;
+  text-align: left;
+  padding: 0;
+  margin: 0;
+}
+
+#extension-root {
+  height: 100%;
+  width: 100%;
+}
