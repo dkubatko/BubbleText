@@ -17,8 +17,8 @@ One might ask: there are simillar tools like *streamlabs*, how is **BubbleText**
 
 * It provides **in-platform** experience by being usable directly through Twitch.
 * Every interaction is highly **dinamic** and **customizable**.
-* BubbleText has direct effect on the stream.
-* Isn't it fun to make your favorite streamer "say" something?
+* BubbleText has a **direct** effect on the stream.
+* Isn't it fun to make your favorite streamer **say** something?
 
 ## Usage
 This repo contains both front- and back-end parts of the extension.
