@@ -8,7 +8,7 @@ Flask-Cors==3.0.3
 Flask-SocketIO==2.9.6
 idna==2.6
 itsdangerous==0.24
-Jinja2==2.10
+Jinja2==2.11.3
 MarkupSafe==1.0
 pyasn1==0.4.2
 pycparser==2.18
